@@ -17,6 +17,23 @@ SUPABASE_ANON_KEY=your-anon-key
 SESSION_SECRET=your-secret
 ```
 
+Production-specific variables:
+```env
+# Set by Vercel automatically, but can be overridden if needed
+VERCEL_URL=your-vercel-domain
+
+# Node environment should be 'production' in deployment
+NODE_ENV=production
+```
+
+### URL Configuration
+The application uses the following logic to determine the base URL:
+1. In production:
+   - Use `VERCEL_URL` if available
+   - Fallback to hardcoded production URL
+2. In development:
+   - Use `localhost:3000`
+
 ### Supabase Configuration
 Authentication redirect URLs needed:
 ```

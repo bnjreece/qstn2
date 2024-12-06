@@ -34,10 +34,23 @@ const storage = createCookieSessionStorage({
 });
 
 function getBaseUrl() {
-  // Check for Vercel deployment
-  if (process.env.VERCEL_URL) {
-    // Handle preview deployments
-    return `https://${process.env.VERCEL_URL}`;
+  const vercelUrl = process.env.VERCEL_URL;
+  const nodeEnv = process.env.NODE_ENV;
+  const productionUrl = 'qstn2.vercel.app'; // Your main production URL
+  
+  // Log all relevant environment variables
+  console.log('\n=== URL Configuration ===');
+  console.log({
+    VERCEL_URL: vercelUrl,
+    NODE_ENV: nodeEnv,
+    IS_PRODUCTION: nodeEnv === 'production',
+    USING_PRODUCTION_URL: !vercelUrl && nodeEnv === 'production'
+  });
+  console.log('=================\n');
+
+  // In production, use VERCEL_URL or fallback to production URL
+  if (nodeEnv === 'production') {
+    return `https://${vercelUrl || productionUrl}`;
   }
 
   // Fallback to localhost for development

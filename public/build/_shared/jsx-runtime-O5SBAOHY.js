@@ -908,10 +908,7 @@ var require_jsx_runtime = __commonJS({
     }
   }
 });
-
-export {
-  require_jsx_runtime
-};
+export default require_jsx_runtime();
 /*! Bundled license information:
 
 react/cjs/react-jsx-runtime.development.js:
@@ -925,4 +922,4 @@ react/cjs/react-jsx-runtime.development.js:
    * LICENSE file in the root directory of this source tree.
    *)
 */
-//# sourceMappingURL=/build/_shared/chunk-B43JI2TA.js.map
+//# sourceMappingURL=/build/_shared/jsx-runtime-O5SBAOHY.js.map

@@ -1,128 +1,130 @@
 import React from "react";
-import {
-  Container,
-  Flex,
-  Card,
-  Heading,
-  Text,
-  Grid,
-  Box,
-  TextArea,
-} from "@radix-ui/themes";
 
 export default function AppIndex() {
   return (
-    <Container size="3">
-      <Flex direction="column" gap="6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="space-y-6">
         {/* Header */}
-        <Card size="4">
-          <Flex justify="between" align="center" gap="4">
-            <Heading size="8" mb="1">Personal Plan</Heading>
-            <Text size="2" color="gray">Last Updated: {new Date().toLocaleDateString()}</Text>
-          </Flex>
-        </Card>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex justify-between items-center gap-4">
+            <h1 className="text-3xl font-bold">Personal Plan</h1>
+            <span className="text-sm text-gray-500">Last Updated: {new Date().toLocaleDateString()}</span>
+          </div>
+        </div>
 
         {/* Core Values Section */}
-        <Card size="4">
-          <Heading size="4" mb="3">Core Values</Heading>
-          <Text size="2" color="gray" mb="4">(Fill in up to 5 of your strongest core values)</Text>
-          <Grid columns="5" gap="3">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-3">Core Values</h2>
+          <p className="text-sm text-gray-500 mb-4">(Fill in up to 5 of your strongest core values)</p>
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
             {[1, 2, 3, 4, 5].map((i) => (
-              <Box key={i}>
+              <div key={i}>
                 <input 
                   placeholder={`Value ${i}`}
-                  className="rt-TextFieldInput rt-r-size-2"
-                  style={{ width: '100%' }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </Box>
+              </div>
             ))}
-          </Grid>
-        </Card>
+          </div>
+        </div>
 
         {/* Time Frame Sections */}
-        <Card size="4">
-          <Heading size="4" mb="4">Long-term Aspirations (10-25 years)</Heading>
-          <Grid columns="4" gap="4">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">Long-term Aspirations (10-25 years)</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Relationships */}
-            <Box>
-              <Heading size="3" mb="2">Relationships</Heading>
-              <TextArea placeholder="Your relationship aspirations..." size="3" style={{ minHeight: '120px' }} />
-            </Box>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Relationships</h3>
+              <textarea 
+                placeholder="Your relationship aspirations..." 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                rows={5}
+              />
+            </div>
 
             {/* Achievements */}
-            <Box>
-              <Heading size="3" mb="2">Achievements</Heading>
-              <TextArea placeholder="Your achievement aspirations..." size="3" style={{ minHeight: '120px' }} />
-            </Box>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Achievements</h3>
+              <textarea 
+                placeholder="Your achievement aspirations..." 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                rows={5}
+              />
+            </div>
 
             {/* Rituals */}
-            <Box>
-              <Heading size="3" mb="2">Rituals</Heading>
-              <TextArea placeholder="Your ritual aspirations..." size="3" style={{ minHeight: '120px' }} />
-            </Box>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Rituals</h3>
+              <textarea 
+                placeholder="Your ritual aspirations..." 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                rows={5}
+              />
+            </div>
 
             {/* Wealth */}
-            <Box>
-              <Heading size="3" mb="2">Wealth (Experiences)</Heading>
-              <TextArea placeholder="Your wealth/experience aspirations..." size="3" style={{ minHeight: '120px' }} />
-            </Box>
-          </Grid>
-        </Card>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Wealth (Experiences)</h3>
+              <textarea 
+                placeholder="Your wealth/experience aspirations..." 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                rows={5}
+              />
+            </div>
+          </div>
+        </div>
 
         {/* 1 Year Activities */}
-        <Card size="4">
-          <Heading size="4" mb="2">1 Year Activities</Heading>
-          <Text size="2" color="gray" mb="4">(5 or less)</Text>
-          <Flex direction="column" gap="3">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-2">1 Year Activities</h2>
+          <p className="text-sm text-gray-500 mb-4">(5 or less)</p>
+          <div className="space-y-3">
             {[1, 2, 3, 4, 5].map((i) => (
-              <Box key={i}>
+              <div key={i}>
                 <input 
                   placeholder={`Activity ${i}`}
-                  className="rt-TextFieldInput rt-r-size-2"
-                  style={{ width: '100%' }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </Box>
+              </div>
             ))}
-          </Flex>
-        </Card>
+          </div>
+        </div>
 
         {/* 90 Day Activities */}
-        <Grid columns="2" gap="4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* START Activities */}
-          <Card size="4">
-            <Heading size="4" mb="2">90 Day Activities - START</Heading>
-            <Text size="2" color="gray" mb="4">(5 or less)</Text>
-            <Flex direction="column" gap="3">
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-2">90 Day Activities - START</h2>
+            <p className="text-sm text-gray-500 mb-4">(5 or less)</p>
+            <div className="space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
-                <Box key={i}>
+                <div key={i}>
                   <input 
                     placeholder={`Start Activity ${i}`}
-                    className="rt-TextFieldInput rt-r-size-2"
-                    style={{ width: '100%' }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
-                </Box>
+                </div>
               ))}
-            </Flex>
-          </Card>
+            </div>
+          </div>
 
           {/* STOP Activities */}
-          <Card size="4">
-            <Heading size="4" mb="2">90 Day Activities - STOP</Heading>
-            <Text size="2" color="gray" mb="4">(5 or less)</Text>
-            <Flex direction="column" gap="3">
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-2">90 Day Activities - STOP</h2>
+            <p className="text-sm text-gray-500 mb-4">(5 or less)</p>
+            <div className="space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
-                <Box key={i}>
+                <div key={i}>
                   <input 
                     placeholder={`Stop Activity ${i}`}
-                    className="rt-TextFieldInput rt-r-size-2"
-                    style={{ width: '100%' }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
-                </Box>
+                </div>
               ))}
-            </Flex>
-          </Card>
-        </Grid>
-      </Flex>
-    </Container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 } 

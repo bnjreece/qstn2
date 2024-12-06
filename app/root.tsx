@@ -12,11 +12,26 @@ import {
 import styles from "./styles/tailwind.css";
 
 export const loader: LoaderFunction = () => {
+  console.log('Server ENV check:', {
+    hasSupabaseUrl: !!process.env.SUPABASE_URL,
+    hasSupabaseAnonKey: !!process.env.SUPABASE_ANON_KEY,
+    supabaseUrlLength: process.env.SUPABASE_URL?.length,
+  });
+
+  const env = {
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+  };
+
+  if (!env.SUPABASE_URL || !env.SUPABASE_ANON_KEY) {
+    console.error('Missing required environment variables:', {
+      hasSupabaseUrl: !!env.SUPABASE_URL,
+      hasSupabaseAnonKey: !!env.SUPABASE_ANON_KEY,
+    });
+  }
+
   return json({
-    ENV: {
-      SUPABASE_URL: process.env.SUPABASE_URL,
-      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
-    },
+    ENV: env,
   });
 };
 
@@ -33,6 +48,12 @@ export const links: LinksFunction = () => [
 
 export default function App(): JSX.Element {
   const data = useLoaderData<typeof loader>();
+  
+  console.log('Client ENV check:', {
+    hasSupabaseUrl: !!data.ENV.SUPABASE_URL,
+    hasSupabaseAnonKey: !!data.ENV.SUPABASE_ANON_KEY,
+    supabaseUrlLength: data.ENV.SUPABASE_URL?.length,
+  });
   
   return (
     <html lang="en" className="h-full bg-gray-100" suppressHydrationWarning>
@@ -58,7 +79,7 @@ export default function App(): JSX.Element {
 }
 
 export function ErrorBoundary({ error }: { error: Error | undefined }): JSX.Element {
-  console.error(error);
+  console.error('App Error:', error);
   return (
     <html lang="en">
       <head>
@@ -74,6 +95,11 @@ export function ErrorBoundary({ error }: { error: Error | undefined }): JSX.Elem
               <p className="mt-2 text-center text-sm text-gray-600">
                 {error?.message || 'An unexpected error occurred'}
               </p>
+              {process.env.NODE_ENV === 'development' && error?.stack && (
+                <pre className="mt-4 p-4 bg-gray-100 rounded text-xs overflow-auto">
+                  {error.stack}
+                </pre>
+              )}
             </div>
           </div>
         </div>

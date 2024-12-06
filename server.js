@@ -1,16 +1,15 @@
-const path = require("path");
-const express = require("express");
-const { createRequestHandler } = require("@remix-run/express");
+import { createRequestHandler } from "@remix-run/express";
+import { broadcastDevReady } from "@remix-run/node";
+import express from "express";
+import * as build from "@remix-run/dev/server-build";
 
 const app = express();
-const BUILD_DIR = path.join(process.cwd(), "build");
-
 app.use(express.static("public"));
 
 app.all(
   "*",
   createRequestHandler({
-    build: require(BUILD_DIR),
+    build,
     mode: process.env.NODE_ENV,
   })
 );
@@ -18,4 +17,7 @@ app.all(
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
+  if (process.env.NODE_ENV === "development") {
+    broadcastDevReady(build);
+  }
 }); 

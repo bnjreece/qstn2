@@ -11,5 +11,5 @@ export async function loader({ request }: DataFunctionArgs) {
   }
   
   // Otherwise redirect to login
-  return redirect("/login");
+  return redirect("/auth/login");
 } 

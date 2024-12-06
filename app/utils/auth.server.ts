@@ -110,12 +110,13 @@ export async function logout(request: Request) {
 export async function sendMagicLink(email: string) {
   logAuthEvent('Sending magic link', { email });
   
-  // Use environment variables for the redirect URL
-  const productionUrl = process.env.VERCEL_URL || 'www.qstn.co';
-  // Ensure the URL has the protocol and callback path
-  const redirectTo = productionUrl.startsWith('http') 
-    ? `${productionUrl}/auth/callback`
-    : `https://${productionUrl}/auth/callback`;
+  // In production, always use www.qstn.co
+  // In development, use localhost
+  const productionUrl = process.env.NODE_ENV === 'production' 
+    ? 'www.qstn.co'
+    : 'localhost:3000';
+    
+  const redirectTo = `https://${productionUrl}/auth/callback`;
   
   // Log URL configuration for debugging
   console.log('\n=== Magic Link Configuration ===');

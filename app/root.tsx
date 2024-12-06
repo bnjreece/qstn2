@@ -7,31 +7,16 @@ import {
   Scripts,
 } from "@remix-run/react";
 import { Theme } from "@radix-ui/themes";
-import styles from "@radix-ui/themes/styles.css";
-import globalStylesUrl from "./styles/global.css";
+import "@radix-ui/themes/styles.css";
 
 export const links = () => [
   {
     rel: "stylesheet",
-    href: styles,
+    href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
   },
   {
     rel: "stylesheet",
-    href: globalStylesUrl,
-  },
-  {
-    rel: "icon",
-    href: "data:image/x-icon;base64,AA",
-    type: "image/x-icon",
-  },
-  {
-    rel: "preconnect",
-    href: "https://fonts.googleapis.com",
-  },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
+    href: "https://cdn.jsdelivr.net/npm/@radix-ui/themes@latest/styles.css",
   },
 ];
 
@@ -44,8 +29,8 @@ export default function App(): JSX.Element {
         <Meta />
         <Links />
       </head>
-      <body>
-        <Theme accentColor="blue" grayColor="slate" scaling="100%" radius="medium">
+      <body style={{ margin: 0, backgroundColor: 'var(--gray-1)' }}>
+        <Theme appearance="light" accentColor="blue" grayColor="slate" radius="medium" scaling="100%">
           <Outlet />
         </Theme>
         <Scripts />

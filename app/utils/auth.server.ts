@@ -50,7 +50,13 @@ function getBaseUrl() {
 
   // In production, use VERCEL_URL or fallback to production URL
   if (nodeEnv === 'production') {
-    return `https://${vercelUrl || productionUrl}`;
+    // Ensure we're using the full URL with https protocol
+    const domain = vercelUrl || productionUrl;
+    // If the URL already includes the protocol, use it as is
+    if (domain.startsWith('http')) {
+      return domain;
+    }
+    return `https://${domain}`;
   }
 
   // Fallback to localhost for development
@@ -103,8 +109,11 @@ export async function logout(request: Request) {
 
 export async function sendMagicLink(email: string) {
   logAuthEvent('Sending magic link', { email });
-  const baseUrl = getBaseUrl();
-  const redirectTo = `${baseUrl}/auth/callback`;
+  
+  // Always use the production URL for magic link redirects
+  const productionUrl = process.env.VERCEL_URL || 'qstn2.vercel.app';
+  const redirectTo = `https://${productionUrl}/auth/callback`;
+  
   logAuthEvent('Configured redirect URL', { redirectTo });
   
   try {

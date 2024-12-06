@@ -111,7 +111,7 @@ export async function sendMagicLink(email: string) {
   logAuthEvent('Sending magic link', { email });
   
   // Use environment variables for the redirect URL
-  const productionUrl = process.env.VERCEL_URL || 'qstn.co';
+  const productionUrl = process.env.VERCEL_URL || 'www.qstn.co';
   // Ensure the URL has the protocol and callback path
   const redirectTo = productionUrl.startsWith('http') 
     ? `${productionUrl}/auth/callback`

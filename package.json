@@ -6,7 +6,9 @@
     "dev": "remix dev",
     "build": "remix build",
     "start": "remix-serve build/index.js",
-    "deploy": "vercel deploy"
+    "deploy": "vercel deploy",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
   },
   "keywords": [],
   "author": "",
@@ -17,18 +19,24 @@
     "@remix-run/node": "^2.3.1",
     "@remix-run/react": "^2.3.1",
     "@remix-run/serve": "^2.3.1",
-    "@supabase/supabase-js": "^2.39.0",
-    "@vercel/node": "^3.0.11",
+    "@vercel/node": "^2.10.3",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.3.1",
+    "@remix-run/eslint-config": "^2.15.0",
+    "@supabase/supabase-js": "^2.47.1",
     "@types/node": "^20.10.4",
     "@types/react": "^18.2.42",
     "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
     "typescript": "^5.3.3",
-    "vercel": "^32.6.1"
+    "vercel": "^32.3.0"
   }
 }

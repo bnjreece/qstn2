@@ -1,6 +1,7 @@
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { supabase } from "~/utils/supabase.server";
+import React from "react";
+import { supabase } from "../utils/supabase.server";
 
 export async function loader() {
   const { data, error } = await supabase

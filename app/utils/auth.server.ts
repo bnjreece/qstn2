@@ -10,6 +10,11 @@ function logAuthEvent(message: string, data?: any) {
   console.log('\n=== Auth Server Event ===');
   console.log('Time:', new Date().toISOString());
   console.log('Message:', message);
+  console.log('Environment:', {
+    NODE_ENV: process.env.NODE_ENV,
+    VERCEL_URL: process.env.VERCEL_URL,
+    PORT: process.env.PORT
+  });
   if (data) {
     console.log('Data:', JSON.stringify(data, null, 2));
   }
@@ -29,10 +34,12 @@ const storage = createCookieSessionStorage({
 });
 
 function getBaseUrl() {
+  // Check for Vercel deployment
   if (process.env.VERCEL_URL) {
-    // Using HTTPS on Vercel
+    // Handle preview deployments
     return `https://${process.env.VERCEL_URL}`;
   }
+
   // Fallback to localhost for development
   const port = process.env.PORT || 3000;
   return `http://localhost:${port}`;

@@ -19,7 +19,7 @@ SESSION_SECRET=your-secret
 
 Production-specific variables:
 ```env
-# Set by Vercel automatically, but can be overridden if needed
+# Set by Vercel automatically
 VERCEL_URL=your-vercel-domain
 
 # Node environment should be 'production' in deployment
@@ -27,27 +27,43 @@ NODE_ENV=production
 ```
 
 ### URL Configuration
-The application uses the following logic to determine the base URL:
+The application uses the following logic for authentication redirects:
 1. In production:
-   - Use `VERCEL_URL` if available
-   - Fallback to hardcoded production URL
+   - Always use `https://www.qstn.co`
+   - Ignore preview deployment URLs
 2. In development:
-   - Use `localhost:3000`
+   - Use `http://localhost:3000`
 
 ### Supabase Configuration
-Authentication redirect URLs needed:
+Required settings in Supabase project:
+
+1. Site URL: `https://www.qstn.co`
+
+2. Redirect URLs:
 ```
-https://qstn2.vercel.app/auth/callback
-https://qstn2-git-main-bnjreeces-projects.vercel.app/auth/callback
-https://qstn2-fsxjugq6d-bnjreeces-projects.vercel.app/auth/callback
+https://www.qstn.co/auth/callback
 http://localhost:3000/auth/callback
 ```
+
+3. Additional settings:
+- Auth > Email Auth enabled
+- Auth > PKCE flow enabled
+- RLS policies configured for documents
+
+### Domain Configuration
+1. Primary domain: `www.qstn.co`
+2. Redirect configuration:
+   - `qstn.co` redirects to `www.qstn.co`
+   - All traffic uses HTTPS
 
 ### Vercel Configuration
 - Framework Preset: Remix
 - Build Command: `npx remix build`
 - Install Command: `npm install`
 - Output Directory: `public/build`
+- Domain Configuration:
+  - Primary: `www.qstn.co`
+  - Redirects: `qstn.co` → `www.qstn.co`
 
 ## Current State
 

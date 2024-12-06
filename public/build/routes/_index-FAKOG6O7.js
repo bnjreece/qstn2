@@ -51,7 +51,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/_index.tsx"
   );
-  import.meta.hot.lastModified = "1733448376783.6653";
+  import.meta.hot.lastModified = "1733448505272.6204";
 }
 function Index() {
   _s();
@@ -66,26 +66,34 @@ function Index() {
       lineHeight: "1.4",
       maxWidth: "800px",
       margin: "0 auto",
-      padding: "2rem"
+      padding: "2rem",
+      backgroundColor: "#fff1f0",
+      border: "1px solid #ff4d4f",
+      borderRadius: "4px"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h1", { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h1", { style: {
+        color: "#cf1322"
+      }, children: [
         "Error: ",
         error
       ] }, void 0, true, {
         fileName: "app/routes/_index.tsx",
-        lineNumber: 74,
+        lineNumber: 88,
         columnNumber: 9
       }, this),
       details && /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("pre", { style: {
-        whiteSpace: "pre-wrap"
+        whiteSpace: "pre-wrap",
+        backgroundColor: "#fff",
+        padding: "1rem",
+        borderRadius: "4px"
       }, children: JSON.stringify(details, null, 2) }, void 0, false, {
         fileName: "app/routes/_index.tsx",
-        lineNumber: 75,
+        lineNumber: 91,
         columnNumber: 21
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/_index.tsx",
-      lineNumber: 67,
+      lineNumber: 78,
       columnNumber: 12
     }, this);
   }
@@ -97,11 +105,11 @@ function Index() {
     padding: "2rem"
   }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h1", { children: message }, void 0, false, {
     fileName: "app/routes/_index.tsx",
-    lineNumber: 89,
+    lineNumber: 108,
     columnNumber: 7
   }, this) }, void 0, false, {
     fileName: "app/routes/_index.tsx",
-    lineNumber: 82,
+    lineNumber: 101,
     columnNumber: 10
   }, this);
 }
@@ -116,4 +124,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   Index as default
 };
-//# sourceMappingURL=/build/routes/_index-GFJTAY6V.js.map
+//# sourceMappingURL=/build/routes/_index-FAKOG6O7.js.map

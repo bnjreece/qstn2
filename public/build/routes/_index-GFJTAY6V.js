@@ -51,13 +51,44 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/_index.tsx"
   );
-  import.meta.hot.lastModified = "1733447285314.26";
+  import.meta.hot.lastModified = "1733448376783.6653";
 }
 function Index() {
   _s();
   const {
-    message
+    message,
+    error,
+    details
   } = useLoaderData();
+  if (error) {
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: {
+      fontFamily: "system-ui, sans-serif",
+      lineHeight: "1.4",
+      maxWidth: "800px",
+      margin: "0 auto",
+      padding: "2rem"
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h1", { children: [
+        "Error: ",
+        error
+      ] }, void 0, true, {
+        fileName: "app/routes/_index.tsx",
+        lineNumber: 74,
+        columnNumber: 9
+      }, this),
+      details && /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("pre", { style: {
+        whiteSpace: "pre-wrap"
+      }, children: JSON.stringify(details, null, 2) }, void 0, false, {
+        fileName: "app/routes/_index.tsx",
+        lineNumber: 75,
+        columnNumber: 21
+      }, this)
+    ] }, void 0, true, {
+      fileName: "app/routes/_index.tsx",
+      lineNumber: 67,
+      columnNumber: 12
+    }, this);
+  }
   return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { style: {
     fontFamily: "system-ui, sans-serif",
     lineHeight: "1.4",
@@ -66,15 +97,15 @@ function Index() {
     padding: "2rem"
   }, children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h1", { children: message }, void 0, false, {
     fileName: "app/routes/_index.tsx",
-    lineNumber: 53,
+    lineNumber: 89,
     columnNumber: 7
   }, this) }, void 0, false, {
     fileName: "app/routes/_index.tsx",
-    lineNumber: 46,
+    lineNumber: 82,
     columnNumber: 10
   }, this);
 }
-_s(Index, "KVVfPjqcmY1AL6EJPM/pBsM8uKc=", false, function() {
+_s(Index, "AqIohYfFI64OyJdgMBnK2dhUuJA=", false, function() {
   return [useLoaderData];
 });
 _c = Index;
@@ -85,4 +116,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   Index as default
 };
-//# sourceMappingURL=/build/routes/_index-IVN5FJLP.js.map
+//# sourceMappingURL=/build/routes/_index-GFJTAY6V.js.map

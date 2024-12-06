@@ -110,9 +110,8 @@ export async function logout(request: Request) {
 export async function sendMagicLink(email: string) {
   logAuthEvent('Sending magic link', { email });
   
-  // Always use the production URL for magic link redirects
-  const productionUrl = process.env.VERCEL_URL || 'qstn2.vercel.app';
-  const redirectTo = `https://${productionUrl}/auth/callback`;
+  // Hardcode the production URL
+  const redirectTo = 'https://qstn2.vercel.app/auth/callback';
   
   logAuthEvent('Configured redirect URL', { redirectTo });
   

@@ -5,6 +5,7 @@
 - App Layout: `app/routes/app.tsx`
 - Form Steps: `app/config/form-sections.ts`
 - Database Types: `app/types/supabase.ts`
+- Database Schema: `app/ai/SCHEMA.md`
 - Shared Components: `app/components/layout/*`
 
 ## Deployment Configuration
@@ -77,32 +78,6 @@ http://localhost:3000/auth/callback
   - `auth.login.tsx`: Login form
   - `AuthLoaderData` type for type-safe auth data
 
-### Database Schema (Implemented)
-```sql
-documents (
-  id uuid PK,
-  user_id uuid FK -> auth.users,
-  title text,
-  created_at timestamp,
-  updated_at timestamp,
-  is_complete boolean
-)
-
-document_sections (
-  id uuid PK,
-  document_id uuid FK -> documents,
-  section_type text,
-  content jsonb,
-  order_index integer,
-  created_at timestamp,
-  updated_at timestamp
-)
-```
-
-RLS policies ensure users can only access their own documents and sections.
-
-## Next Phase: Multi-step Form (In Progress)
-
 ### Form Structure
 Each strategic plan consists of multiple sections, stored as JSON in document_sections:
 1. Core Values & Purpose
@@ -115,35 +90,43 @@ Each strategic plan consists of multiple sections, stored as JSON in document_se
 
 ### Implementation Plan (TODO)
 
-#### 1. Base Components Setup
+#### 1. Database-Driven Questions (In Progress)
+- [x] Create questions and dependencies tables
+- [ ] Seed initial questions from existing hardcoded data
+- [ ] Create question fetching utilities
+- [ ] Update types for database questions
+- [ ] Modify form to use database questions
+- [ ] Add question dependency handling
+
+#### 2. Base Components Setup
 - [ ] Create `app/components/form/` directory
 - [ ] Create `app/components/ui/` directory
 - [ ] Build base text input component with animations
 - [ ] Build form container with step navigation
 - [ ] Implement mobile-first responsive design
 
-#### 2. Form State Management
+#### 3. Form State Management
 - [ ] Create form context for state management
 - [ ] Implement step navigation logic
 - [ ] Add progress tracking
 - [ ] Setup autosave functionality
 - [ ] Add loading and error states
 
-#### 3. Progressive Disclosure UI
+#### 4. Progressive Disclosure UI
 - [ ] Single question view component
 - [ ] Smooth transitions between steps
 - [ ] Progress indicator
 - [ ] Back/Next navigation
 - [ ] Mobile-friendly touch gestures
 
-#### 4. Data Management
+#### 5. Data Management
 - [ ] Setup Supabase real-time subscriptions
 - [ ] Implement autosave to document_sections
 - [ ] Add optimistic updates
 - [ ] Handle offline/error states
 - [ ] Add save indicators
 
-#### 5. Individual Sections
+#### 6. Individual Sections
 - [ ] Core Values & Purpose section
 - [ ] BHAG section
 - [ ] 3-5 Year Targets section
@@ -152,7 +135,7 @@ Each strategic plan consists of multiple sections, stored as JSON in document_se
 - [ ] Weekly Rocks section
 - [ ] Daily Habits section
 
-#### 6. Polish & Optimization
+#### 7. Polish & Optimization
 - [ ] Add keyboard navigation
 - [ ] Implement save indicators
 - [ ] Add progress persistence

@@ -8,15 +8,36 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
+  useNavigation,
 } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import styles from "./styles/tailwind.css";
 
+// Server-side logging helper
+const logServer = (message: string, data?: any) => {
+  const timestamp = new Date().toISOString();
+  const logData = data ? ` | Data: ${JSON.stringify(data, null, 2)}` : '';
+  console.log(`[${timestamp}] 🖥️  Server: ${message}${logData}`);
+};
+
+// Client-side logging helper
+const logClient = (message: string, data?: any) => {
+  const timestamp = new Date().toISOString();
+  const logData = data ? ` | Data: ${JSON.stringify(data, null, 2)}` : '';
+  console.log(`[${timestamp}] 🌐 Browser: ${message}${logData}`);
+};
+
 export const loader: LoaderFunction = () => {
-  console.log('Server ENV check:', {
+  logServer('Root loader starting');
+  
+  const envCheck = {
     hasSupabaseUrl: !!process.env.SUPABASE_URL,
     hasSupabaseAnonKey: !!process.env.SUPABASE_ANON_KEY,
-    supabaseUrlLength: process.env.SUPABASE_URL?.length,
-  });
+    nodeEnv: process.env.NODE_ENV,
+  };
+  
+  logServer('Environment check', envCheck);
 
   const env = {
     SUPABASE_URL: process.env.SUPABASE_URL,
@@ -24,35 +45,59 @@ export const loader: LoaderFunction = () => {
   };
 
   if (!env.SUPABASE_URL || !env.SUPABASE_ANON_KEY) {
-    console.error('Missing required environment variables:', {
-      hasSupabaseUrl: !!env.SUPABASE_URL,
-      hasSupabaseAnonKey: !!env.SUPABASE_ANON_KEY,
-    });
+    const error = 'Missing required environment variables';
+    logServer(error, envCheck);
+    console.error(error, envCheck);
   }
 
+  logServer('Root loader completing');
   return json({
     ENV: env,
   });
 };
 
 export const links: LinksFunction = () => [
-  {
-    rel: "stylesheet",
-    href: styles,
-  },
+  { rel: "stylesheet", href: styles },
   {
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
   },
+  { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
 ];
 
 export default function App(): JSX.Element {
   const data = useLoaderData<typeof loader>();
+  const location = useLocation();
+  const navigation = useNavigation();
+  const mountedRef = useRef(false);
   
-  console.log('Client ENV check:', {
-    hasSupabaseUrl: !!data.ENV.SUPABASE_URL,
-    hasSupabaseAnonKey: !!data.ENV.SUPABASE_ANON_KEY,
-    supabaseUrlLength: data.ENV.SUPABASE_URL?.length,
+  useEffect(() => {
+    if (!mountedRef.current) {
+      logClient('Root component mounted', {
+        pathname: location.pathname,
+        navigationState: navigation.state,
+      });
+      
+      logClient('Window environment check', {
+        hasWindowEnv: !!window.env,
+        windowEnvKeys: window.env ? Object.keys(window.env) : [],
+        url: window.location.href,
+      });
+      
+      mountedRef.current = true;
+    }
+  }, [location, navigation.state]);
+  
+  useEffect(() => {
+    logClient('Navigation state change', {
+      state: navigation.state,
+      location: navigation.location?.pathname,
+    });
+  }, [navigation.state]);
+  
+  logClient('Root component rendering', {
+    pathname: location.pathname,
+    navigationState: navigation.state,
   });
   
   return (
@@ -79,7 +124,17 @@ export default function App(): JSX.Element {
 }
 
 export function ErrorBoundary({ error }: { error: Error | undefined }): JSX.Element {
-  console.error('App Error:', error);
+  const location = useLocation();
+  
+  useEffect(() => {
+    console.error('[Error Boundary]', {
+      timestamp: new Date().toISOString(),
+      error: error?.message,
+      stack: error?.stack,
+      location: location.pathname,
+    });
+  }, [error, location]);
+
   return (
     <html lang="en">
       <head>

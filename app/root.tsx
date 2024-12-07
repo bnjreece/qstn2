@@ -11,7 +11,7 @@ import {
   useLocation,
   useNavigation,
 } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./styles/tailwind.css";
 
 // Server-side logging helper
@@ -70,50 +70,72 @@ export default function App(): JSX.Element {
   const location = useLocation();
   const navigation = useNavigation();
   const mountedRef = useRef(false);
-  
+
   useEffect(() => {
     if (!mountedRef.current) {
-      logClient('Root component mounted', {
-        pathname: location.pathname,
-        navigationState: navigation.state,
-      });
-      
-      logClient('Window environment check', {
-        hasWindowEnv: !!window.env,
-        windowEnvKeys: window.env ? Object.keys(window.env) : [],
-        url: window.location.href,
-      });
-      
+      console.log('[Root] Component mounting');
       mountedRef.current = true;
     }
-  }, [location, navigation.state]);
-  
-  useEffect(() => {
-    logClient('Navigation state change', {
-      state: navigation.state,
-      location: navigation.location?.pathname,
-    });
-  }, [navigation.state]);
-  
-  logClient('Root component rendering', {
-    pathname: location.pathname,
-    navigationState: navigation.state,
-  });
-  
+  }, []);
+
   return (
-    <html lang="en" className="h-full bg-gray-100" suppressHydrationWarning>
+    <html lang="en" className="h-full bg-gray-100">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              console.log('[Head Script] Starting...');
+              window.addEventListener('DOMContentLoaded', () => {
+                console.log('[Head Script] DOM Content Loaded');
+              });
+              window.addEventListener('load', () => {
+                console.log('[Head Script] Window Loaded');
+              });
+            `,
+          }}
+        />
       </head>
       <body className="h-full m-0">
         <Outlet />
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.env = ${JSON.stringify(data.ENV)}`,
+            __html: `window.env = ${JSON.stringify(data.ENV)};`,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              console.log('[Body Script] Starting...');
+              
+              // Test basic JavaScript functionality
+              window.testJS = {
+                log: function(message) {
+                  console.log('[Test JS]', message);
+                },
+                alert: function(message) {
+                  alert(message);
+                },
+                click: function(element) {
+                  console.log('[Test JS] Clicked:', element);
+                  this.alert('Clicked: ' + element);
+                }
+              };
+
+              // Add click handlers after DOM is ready
+              document.addEventListener('DOMContentLoaded', () => {
+                console.log('[Body Script] Adding click handlers...');
+                document.addEventListener('click', (e) => {
+                  console.log('[Body Script] Document clicked:', e.target);
+                }, true);
+              });
+
+              console.log('[Body Script] Setup complete');
+            `,
           }}
         />
         <Scripts />

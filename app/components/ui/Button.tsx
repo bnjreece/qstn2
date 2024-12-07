@@ -14,6 +14,7 @@ export function Button({
   isLoading,
   children,
   onClick,
+  disabled,
   ...props
 }: ButtonProps) {
   const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2';
@@ -29,35 +30,44 @@ export function Button({
     lg: 'px-6 py-3 text-base'
   };
 
-  const disabledStyles = props.disabled || isLoading ? 'opacity-50 cursor-not-allowed' : '';
+  const isDisabled = disabled || isLoading;
+  const disabledStyles = isDisabled ? 'opacity-50 cursor-not-allowed' : '';
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log('Button clicked:', { 
-      disabled: props.disabled, 
+    console.log('[Button] Click event received - VERBOSE:', { 
+      disabled: isDisabled, 
       isLoading, 
       children,
       variant,
       size,
       className,
-      hasOnClick: !!onClick
+      hasOnClick: !!onClick,
+      event: {
+        type: e.type,
+        target: e.target,
+        currentTarget: e.currentTarget,
+        defaultPrevented: e.defaultPrevented
+      }
     });
 
-    if (props.disabled || isLoading) {
-      console.log('Button click ignored - disabled or loading');
+    if (isDisabled) {
+      console.log('[Button] Click ignored - button is disabled or loading');
       return;
     }
 
     if (onClick) {
-      console.log('Calling onClick handler');
+      console.log('[Button] Calling onClick handler');
       onClick(e);
-      console.log('onClick handler completed');
+      console.log('[Button] onClick handler completed');
+    } else {
+      console.log('[Button] No onClick handler provided');
     }
   };
 
   return (
     <button
       type="button"
-      disabled={props.disabled || isLoading}
+      disabled={isDisabled}
       className={twMerge(
         baseStyles,
         variantStyles[variant],

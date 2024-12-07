@@ -1,4 +1,4 @@
-import { ReactNode, Children, isValidElement, useEffect } from 'react';
+import { ReactNode, Children, isValidElement, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { useForm } from './FormContext';
@@ -24,10 +24,41 @@ export function FormContainer({ children }: FormContainerProps) {
     currentStep,
     totalSteps,
     isLoading,
-    hasUnsavedChanges
+    hasUnsavedChanges,
+    hasNextHandler: !!goToNextStep,
+    hasPrevHandler: !!goToPreviousStep
   });
   
   const currentChild = childrenArray[currentStep - 1];
+
+  const handleNext = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log('[FormContainer] Next button clicked:', {
+      currentStep,
+      totalSteps,
+      hasNextHandler: !!goToNextStep
+    });
+    
+    if (goToNextStep) {
+      goToNextStep();
+    } else {
+      console.error('[FormContainer] goToNextStep is undefined');
+    }
+  }, [currentStep, totalSteps, goToNextStep]);
+
+  const handlePrevious = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log('[FormContainer] Previous button clicked:', {
+      currentStep,
+      hasPrevHandler: !!goToPreviousStep
+    });
+    
+    if (goToPreviousStep) {
+      goToPreviousStep();
+    } else {
+      console.error('[FormContainer] goToPreviousStep is undefined');
+    }
+  }, [currentStep, goToPreviousStep]);
 
   // Log state changes
   useEffect(() => {
@@ -37,50 +68,11 @@ export function FormContainer({ children }: FormContainerProps) {
       isLoading,
       hasUnsavedChanges,
       childrenCount: childrenArray.length,
-      hasCurrentChild: !!currentChild
+      hasCurrentChild: !!currentChild,
+      hasNextHandler: !!goToNextStep,
+      hasPrevHandler: !!goToPreviousStep
     });
-  }, [currentStep, totalSteps, isLoading, hasUnsavedChanges, childrenArray.length, currentChild]);
-
-  const handleNext = () => {
-    console.log('[FormContainer] Next button clicked:', {
-      currentStep,
-      totalSteps,
-      isButtonDisabled: currentStep === totalSteps
-    });
-    
-    if (currentStep < totalSteps) {
-      console.log('[FormContainer] Calling goToNextStep');
-      goToNextStep();
-      console.log('[FormContainer] After goToNextStep call');
-    } else {
-      console.log('[FormContainer] Already at last step');
-    }
-  };
-
-  const handlePrevious = () => {
-    console.log('[FormContainer] Previous button clicked:', {
-      currentStep,
-      isButtonDisabled: currentStep === 1
-    });
-    
-    if (currentStep > 1) {
-      console.log('[FormContainer] Calling goToPreviousStep');
-      goToPreviousStep();
-      console.log('[FormContainer] After goToPreviousStep call');
-    } else {
-      console.log('[FormContainer] Already at first step');
-    }
-  };
-
-  // Log button state
-  useEffect(() => {
-    console.log('[FormContainer] Button state:', {
-      nextDisabled: currentStep === totalSteps,
-      prevDisabled: currentStep === 1,
-      currentStep,
-      totalSteps
-    });
-  }, [currentStep, totalSteps]);
+  }, [currentStep, totalSteps, isLoading, hasUnsavedChanges, childrenArray.length, currentChild, goToNextStep, goToPreviousStep]);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] w-full max-w-3xl mx-auto px-8 flex flex-col">
@@ -123,7 +115,15 @@ export function FormContainer({ children }: FormContainerProps) {
         </div>
 
         {/* Navigation buttons */}
-        <div className="py-8 flex justify-between gap-4">
+        <div 
+          className="py-8 flex justify-between gap-4"
+          onClick={(e) => {
+            console.log('[FormContainer] Navigation buttons container clicked:', {
+              target: e.target,
+              currentTarget: e.currentTarget
+            });
+          }}
+        >
           <Button
             onClick={handlePrevious}
             disabled={currentStep === 1}
@@ -134,10 +134,14 @@ export function FormContainer({ children }: FormContainerProps) {
             Previous
           </Button>
           <Button
-            onClick={handleNext}
+            onClick={(e) => {
+              console.log('[FormContainer] Next button clicked directly');
+              handleNext(e);
+            }}
             disabled={currentStep === totalSteps}
             isLoading={isLoading}
             size="lg"
+            data-testid="next-button"
           >
             {currentStep === totalSteps ? 'Complete' : 'Next'}
           </Button>

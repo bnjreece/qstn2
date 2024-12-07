@@ -97,25 +97,24 @@ export function FormProvider({
   }, []);
 
   const goToNextStep = useCallback(() => {
-    console.log('[FormProvider] Going to next step:', {
+    console.log('[FormProvider] goToNextStep called:', {
       currentStep: state.currentStep,
       totalSteps
     });
+
     setState(prev => {
       if (prev.currentStep < totalSteps) {
         const nextStep = prev.currentStep + 1;
-        console.log('[FormProvider] Moving to step:', nextStep);
-        const newState = {
+        console.log('[FormProvider] Updating to next step:', nextStep);
+        return {
           ...prev,
           currentStep: nextStep,
         };
-        console.log('[FormProvider] New state after goToNextStep:', newState);
-        return newState;
       }
-      console.log('[FormProvider] Already at last step, no update needed');
+      console.log('[FormProvider] Already at last step');
       return prev;
     });
-  }, [totalSteps, state.currentStep]);
+  }, [state.currentStep, totalSteps]);
 
   const goToPreviousStep = useCallback(() => {
     console.log('[FormProvider] Going to previous step:', {
@@ -147,6 +146,15 @@ export function FormProvider({
     totalSteps,
   };
 
+  console.log('[FormProvider] Rendering with context value:', {
+    currentStep: value.currentStep,
+    totalSteps: value.totalSteps,
+    hasHandlers: {
+      goToNextStep: !!value.goToNextStep,
+      goToPreviousStep: !!value.goToPreviousStep
+    }
+  });
+
   return (
     <FormContext.Provider value={value}>
       {children}
@@ -157,6 +165,7 @@ export function FormProvider({
 export function useForm() {
   const context = useContext(FormContext);
   if (!context) {
+    console.error('[useForm] Form context is null - this component must be used within a FormProvider');
     throw new Error('useForm must be used within a FormProvider');
   }
   return context;

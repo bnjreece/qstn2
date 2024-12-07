@@ -11,7 +11,18 @@ export async function loader({ request }: DataFunctionArgs) {
     // First check if we have a server-side session
     const userId = await requireUserId(request);
     
-    // Then get user details from Supabase session
+    // In development, bypass Supabase session check
+    if (process.env.NODE_ENV === 'development') {
+      return json<AuthLoaderData>({ 
+        user: {
+          id: userId,
+          email: 'ben@qstn.us',
+          created_at: new Date().toISOString()
+        }
+      });
+    }
+
+    // In production, verify Supabase session
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
     
     if (sessionError) {

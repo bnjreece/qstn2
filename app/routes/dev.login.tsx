@@ -1,20 +1,25 @@
-import { redirect, type DataFunctionArgs } from "@remix-run/node";
+import { Form } from "@remix-run/react";
 import { createUserSession } from "~/utils/auth.server";
 
-// This route is for development only
-export async function loader({ request }: DataFunctionArgs) {
-  if (process.env.NODE_ENV !== 'development') {
-    return redirect('/auth/login');
-  }
+export default function DevLogin() {
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-4">Dev Login</h1>
+        <Form method="post">
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+          >
+            Login as Dev User
+          </button>
+        </Form>
+      </div>
+    </div>
+  );
+}
 
-  try {
-    // Your user ID from Supabase (you can get this from the Supabase dashboard)
-    const devUserId = '379d1265-0faf-450d-9421-d601474f19cb';
-
-    // Create server-side session directly
-    return createUserSession(devUserId, "/app");
-  } catch (error) {
-    console.error('Dev login error:', error);
-    return redirect('/auth/login');
-  }
+export async function action() {
+  // Just create the server session for development
+  return createUserSession("379d1265-0faf-450d-9421-d601474f19cb", "/app");
 } 

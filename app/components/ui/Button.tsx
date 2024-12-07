@@ -13,6 +13,7 @@ export function Button({
   className,
   isLoading,
   children,
+  onClick,
   ...props
 }: ButtonProps) {
   const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2';
@@ -30,6 +31,29 @@ export function Button({
 
   const disabledStyles = props.disabled || isLoading ? 'opacity-50 cursor-not-allowed' : '';
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('Button clicked:', { 
+      disabled: props.disabled, 
+      isLoading, 
+      children,
+      variant,
+      size,
+      className,
+      hasOnClick: !!onClick
+    });
+
+    if (props.disabled || isLoading) {
+      console.log('Button click ignored - disabled or loading');
+      return;
+    }
+
+    if (onClick) {
+      console.log('Calling onClick handler');
+      onClick(e);
+      console.log('onClick handler completed');
+    }
+  };
+
   return (
     <button
       type="button"
@@ -41,6 +65,7 @@ export function Button({
         disabledStyles,
         className
       )}
+      onClick={handleClick}
       {...props}
     >
       {isLoading ? (

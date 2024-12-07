@@ -2,6 +2,7 @@
 module.exports = {
   ignoredRouteFiles: ["**/.*"],
   serverModuleFormat: "esm",
+  serverDependenciesToBundle: ["isbot"],
   future: {
     v3_fetcherPersist: true,
     v3_lazyRouteDiscovery: true,

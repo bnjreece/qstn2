@@ -31,6 +31,8 @@ export function FormProvider({
   totalSteps,
   onSave,
 }: FormProviderProps) {
+  console.log('[FormProvider] Initializing with:', { initialData, totalSteps });
+
   const [state, setState] = useState<FormState>({
     currentStep: 1,
     formData: initialData,
@@ -39,22 +41,38 @@ export function FormProvider({
   });
 
   useEffect(() => {
-    console.log('Form state updated:', state);
-    console.log('Total steps:', totalSteps);
+    console.log('[FormProvider] State updated:', {
+      currentStep: state.currentStep,
+      totalSteps,
+      hasUnsavedChanges: state.hasUnsavedChanges,
+      isLoading: state.isLoading,
+      formDataKeys: Object.keys(state.formData)
+    });
   }, [state, totalSteps]);
 
   const setCurrentStep = useCallback((step: number) => {
-    console.log('Setting current step to:', step);
-    setState(prev => ({ ...prev, currentStep: step }));
+    console.log('[FormProvider] Setting step:', {
+      currentStep: step,
+      previousStep: state.currentStep
+    });
+    setState(prev => {
+      const newState = { ...prev, currentStep: step };
+      console.log('[FormProvider] New state after setCurrentStep:', newState);
+      return newState;
+    });
   }, []);
 
   const updateFormData = useCallback(async (sectionId: string, data: any) => {
-    console.log('Updating form data:', { sectionId, data });
-    setState(prev => ({
-      ...prev,
-      formData: { ...prev.formData, [sectionId]: data },
-      hasUnsavedChanges: true,
-    }));
+    console.log('[FormProvider] Updating form data:', { sectionId, data });
+    setState(prev => {
+      const newState = {
+        ...prev,
+        formData: { ...prev.formData, [sectionId]: data },
+        hasUnsavedChanges: true,
+      };
+      console.log('[FormProvider] New state after updateFormData:', newState);
+      return newState;
+    });
 
     if (onSave) {
       setState(prev => ({ ...prev, isLoading: true }));
@@ -62,7 +80,7 @@ export function FormProvider({
         await onSave({ ...state.formData, [sectionId]: data });
         setState(prev => ({ ...prev, hasUnsavedChanges: false }));
       } catch (error) {
-        console.error('Error saving form data:', error);
+        console.error('[FormProvider] Error saving form data:', error);
       } finally {
         setState(prev => ({ ...prev, isLoading: false }));
       }
@@ -70,27 +88,53 @@ export function FormProvider({
   }, [onSave, state.formData]);
 
   const setIsLoading = useCallback((loading: boolean) => {
-    setState(prev => ({ ...prev, isLoading: loading }));
+    console.log('[FormProvider] Setting loading:', loading);
+    setState(prev => {
+      const newState = { ...prev, isLoading: loading };
+      console.log('[FormProvider] New state after setIsLoading:', newState);
+      return newState;
+    });
   }, []);
 
   const goToNextStep = useCallback(() => {
-    console.log('Going to next step from:', state.currentStep, 'total:', totalSteps);
-    if (state.currentStep < totalSteps) {
-      setState(prev => ({
-        ...prev,
-        currentStep: prev.currentStep + 1,
-      }));
-    }
-  }, [state.currentStep, totalSteps]);
+    console.log('[FormProvider] Going to next step:', {
+      currentStep: state.currentStep,
+      totalSteps
+    });
+    setState(prev => {
+      if (prev.currentStep < totalSteps) {
+        const nextStep = prev.currentStep + 1;
+        console.log('[FormProvider] Moving to step:', nextStep);
+        const newState = {
+          ...prev,
+          currentStep: nextStep,
+        };
+        console.log('[FormProvider] New state after goToNextStep:', newState);
+        return newState;
+      }
+      console.log('[FormProvider] Already at last step, no update needed');
+      return prev;
+    });
+  }, [totalSteps, state.currentStep]);
 
   const goToPreviousStep = useCallback(() => {
-    console.log('Going to previous step from:', state.currentStep);
-    if (state.currentStep > 1) {
-      setState(prev => ({
-        ...prev,
-        currentStep: prev.currentStep - 1,
-      }));
-    }
+    console.log('[FormProvider] Going to previous step:', {
+      currentStep: state.currentStep
+    });
+    setState(prev => {
+      if (prev.currentStep > 1) {
+        const prevStep = prev.currentStep - 1;
+        console.log('[FormProvider] Moving to step:', prevStep);
+        const newState = {
+          ...prev,
+          currentStep: prevStep,
+        };
+        console.log('[FormProvider] New state after goToPreviousStep:', newState);
+        return newState;
+      }
+      console.log('[FormProvider] Already at first step, no update needed');
+      return prev;
+    });
   }, [state.currentStep]);
 
   const value = {

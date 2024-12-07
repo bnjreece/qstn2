@@ -161,6 +161,27 @@ Each strategic plan consists of multiple sections, stored as JSON in document_se
    - Swipe navigation (optional)
    - Responsive text sizing
 
+4. Form Debugging Best Practices:
+   - Use consistent logging format with component prefixes:
+     ```typescript
+     console.log('[ComponentName] Event:', { data });
+     ```
+   - Track component lifecycle:
+     - Log mounting and unmounting
+     - Log prop and state changes
+     - Log form context updates
+     - Log event handler execution
+   - Verify context providers:
+     - Import hooks correctly (e.g., `useForm`)
+     - Check context values are accessible
+     - Log context value changes
+   - Event handler implementation:
+     - Use `useCallback` for handlers
+     - Add TypeScript types
+     - Prevent default behavior when needed
+     - Add error boundaries
+     - Log event flow
+
 ## Future Phases
 
 ### Phase 2: Personality Assessment

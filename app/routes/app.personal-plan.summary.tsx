@@ -1,18 +1,9 @@
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, Link } from '@remix-run/react';
 import { requireUserId } from '~/utils/auth.server';
 import { supabase } from '~/utils/supabase.server';
 import type { Question } from '~/utils/questions.server';
-
-interface LoaderData {
-  sections: {
-    title: string;
-    questions: Array<{
-      question: Question;
-      answer: string | null;
-    }>;
-  }[];
-}
+import type { ReactNode } from 'react';
 
 export async function loader({ request }: { request: Request }) {
   const userId = await requireUserId(request);
@@ -66,14 +57,14 @@ export async function loader({ request }: { request: Request }) {
       }))
   }));
 
-  return json<LoaderData>({ sections });
+  return json({ sections });
 }
 
-export default function PersonalPlanSummary() {
+export default function PersonalPlanSummary(): ReactNode {
   const { sections } = useLoaderData<typeof loader>();
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] w-full max-w-4xl mx-auto px-8 py-12">
+    <>
       <h1 className="text-4xl font-light text-gray-900 mb-8">Your Personal Plan Summary</h1>
       
       <div className="space-y-16">
@@ -106,13 +97,13 @@ export default function PersonalPlanSummary() {
       </div>
 
       <div className="mt-12 flex justify-end">
-        <a
-          href="/app/personal-plan?step=1"
+        <Link
+          to=".."
           className="px-6 py-3 text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Edit Your Plan
-        </a>
+        </Link>
       </div>
-    </div>
+    </>
   );
 } 

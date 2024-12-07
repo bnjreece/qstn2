@@ -129,9 +129,24 @@ export default function App(): JSX.Element {
               // Add click handlers after DOM is ready
               document.addEventListener('DOMContentLoaded', () => {
                 console.log('[Body Script] Adding click handlers...');
+                
+                // Capture phase to log all clicks
                 document.addEventListener('click', (e) => {
-                  console.log('[Body Script] Document clicked:', e.target);
+                  console.log('[Body Script] Click captured:', {
+                    target: e.target,
+                    defaultPrevented: e.defaultPrevented,
+                    phase: 'capture'
+                  });
                 }, true);
+
+                // Bubble phase to log unhandled clicks
+                document.addEventListener('click', (e) => {
+                  console.log('[Body Script] Click bubbled:', {
+                    target: e.target,
+                    defaultPrevented: e.defaultPrevented,
+                    phase: 'bubble'
+                  });
+                }, false);
               });
 
               console.log('[Body Script] Setup complete');

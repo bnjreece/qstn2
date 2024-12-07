@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useState, useCallback, useEffect } from 'react';
+import { createContext, useContext, ReactNode, useState, useCallback, useEffect, useMemo } from 'react';
 
 interface FormState {
   currentStep: number;
@@ -23,6 +23,7 @@ interface FormProviderProps {
   initialData?: Record<string, any>;
   totalSteps: number;
   onSave?: (data: Record<string, any>) => Promise<void>;
+  currentStep?: number;
 }
 
 export function FormProvider({
@@ -30,15 +31,24 @@ export function FormProvider({
   initialData = {},
   totalSteps,
   onSave,
+  currentStep = 1,
 }: FormProviderProps) {
-  console.log('[FormProvider] Initializing with:', { initialData, totalSteps });
+  console.log('[FormProvider] Initializing with:', { initialData, totalSteps, currentStep });
 
   const [state, setState] = useState<FormState>({
-    currentStep: 1,
+    currentStep,
     formData: initialData,
     isLoading: false,
     hasUnsavedChanges: false,
   });
+
+  useEffect(() => {
+    console.log('[FormProvider] Current step prop changed:', currentStep);
+    setState(prev => ({
+      ...prev,
+      currentStep,
+    }));
+  }, [currentStep]);
 
   useEffect(() => {
     console.log('[FormProvider] State updated:', {
@@ -97,6 +107,7 @@ export function FormProvider({
   }, []);
 
   const goToNextStep = useCallback(() => {
+    console.log('[FormProvider] Attempting to go to next step');
     setState(prev => {
       const nextStep = prev.currentStep + 1;
       if (nextStep <= totalSteps) {
@@ -116,26 +127,22 @@ export function FormProvider({
   }, [totalSteps]);
 
   const goToPreviousStep = useCallback(() => {
-    console.log('[FormProvider] Going to previous step:', {
-      currentStep: state.currentStep
-    });
+    console.log('[FormProvider] Attempting to go to previous step');
     setState(prev => {
       if (prev.currentStep > 1) {
         const prevStep = prev.currentStep - 1;
         console.log('[FormProvider] Moving to step:', prevStep);
-        const newState = {
+        return {
           ...prev,
           currentStep: prevStep,
         };
-        console.log('[FormProvider] New state after goToPreviousStep:', newState);
-        return newState;
       }
-      console.log('[FormProvider] Already at first step, no update needed');
+      console.log('[FormProvider] Already at first step');
       return prev;
     });
-  }, [state.currentStep]);
+  }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     ...state,
     setCurrentStep,
     updateFormData,
@@ -143,7 +150,7 @@ export function FormProvider({
     goToNextStep,
     goToPreviousStep,
     totalSteps,
-  };
+  }), [state, setCurrentStep, updateFormData, setIsLoading, goToNextStep, goToPreviousStep, totalSteps]);
 
   console.log('[FormProvider] Rendering with context value:', {
     currentStep: value.currentStep,

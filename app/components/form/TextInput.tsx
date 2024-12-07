@@ -17,7 +17,7 @@ export function TextInput({
   onChange,
   onSave,
   label,
-  placeholder = 'Start typing...',
+  placeholder = 'Click here and start typing...',
   autoFocus = false,
   minRows = 3,
   maxRows = 10
@@ -34,8 +34,8 @@ export function TextInput({
 
     textarea.style.height = 'auto';
     const newHeight = Math.min(
-      Math.max(textarea.scrollHeight, minRows * 24), // 24px per row
-      maxRows * 24
+      Math.max(textarea.scrollHeight, minRows * 28), // Increased line height
+      maxRows * 28
     );
     textarea.style.height = `${newHeight}px`;
   }, [value, minRows, maxRows]);
@@ -58,46 +58,48 @@ export function TextInput({
     saveValue();
   }, [debouncedValue, value, onSave]);
 
-  return (
-    <div className="relative transition-all duration-300 ease-in-out">
-      {/* Label */}
-      <label
-        className={`absolute left-4 transition-all duration-300 ease-in-out ${
-          isFocused || value
-            ? '-top-6 text-sm text-indigo-600'
-            : 'top-4 text-gray-500'
-        }`}
-      >
-        {label}
-      </label>
+  // Focus the textarea on mount if autoFocus is true
+  useEffect(() => {
+    if (autoFocus && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [autoFocus]);
 
+  return (
+    <div className="relative">
       {/* Textarea */}
-      <textarea
-        ref={textareaRef}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-        className={`w-full p-4 border-2 rounded-lg transition-all duration-300 ease-in-out resize-none
-          ${
-            isFocused
-              ? 'border-indigo-600 shadow-lg shadow-indigo-100'
-              : 'border-gray-200'
-          }
-          focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50`}
-        style={{ minHeight: `${minRows * 24}px` }}
-      />
+      <div className="relative">
+        <textarea
+          ref={textareaRef}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholder={placeholder}
+          className={`w-full bg-transparent text-2xl font-light border-b-2 p-0 pb-2 resize-none
+            ${
+              isFocused
+                ? 'border-indigo-600'
+                : 'border-gray-200 hover:border-gray-300'
+            }
+            focus:outline-none focus:ring-0 transition-colors`}
+          style={{ minHeight: `${minRows * 28}px`, lineHeight: '1.4' }}
+        />
+        
+        {/* Placeholder text when empty */}
+        {!value && !isFocused && (
+          <div className="absolute inset-0 pointer-events-none">
+            <span className="text-2xl font-light text-gray-400">
+              {placeholder}
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* Save indicator */}
-      {onSave && (
-        <div
-          className={`absolute right-4 bottom-4 transition-opacity duration-300 ${
-            isSaving ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <span className="text-sm text-indigo-600">Saving...</span>
+      {onSave && isSaving && (
+        <div className="absolute right-0 bottom-0 text-sm text-indigo-600">
+          Saving...
         </div>
       )}
     </div>

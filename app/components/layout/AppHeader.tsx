@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import type { User } from '@supabase/supabase-js';
 
 interface AppHeaderProps {
@@ -12,7 +12,17 @@ export function AppHeader({ user }: AppHeaderProps) {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <span className="text-xl font-bold text-indigo-600">QSTN</span>
+              <Link to="/app" className="text-xl font-bold text-indigo-600">
+                QSTN
+              </Link>
+            </div>
+            <div className="ml-6 flex space-x-8">
+              <Link
+                to="/app/personal-plan"
+                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 border-b-2 border-transparent hover:border-gray-300"
+              >
+                Personal Plan
+              </Link>
             </div>
           </div>
           <div className="flex items-center">

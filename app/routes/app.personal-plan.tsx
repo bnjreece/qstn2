@@ -184,7 +184,14 @@ function QuestionStep({ question }: { question: Question }) {
 
 export default function PersonalPlan() {
   const { questions } = useLoaderData<typeof loader>();
-  console.log('[PersonalPlan] Rendering with questions:', questions?.length);
+  console.log('[PersonalPlan] Rendering with questions:', {
+    count: questions?.length,
+    questions: questions?.map(q => ({
+      id: q.id,
+      title: q.title,
+      description: q.description
+    }))
+  });
 
   const handleSave = useCallback(async (data: Record<string, any>) => {
     console.log('[PersonalPlan] Saving form data:', data);
@@ -201,11 +208,6 @@ export default function PersonalPlan() {
     );
   }
 
-  console.log('[PersonalPlan] Rendering form with questions:', {
-    count: questions.length,
-    questionIds: questions.map(q => q.id)
-  });
-
   return (
     <div>
       <TestComponent />
@@ -215,9 +217,16 @@ export default function PersonalPlan() {
         onSave={handleSave}
       >
         <FormContainer>
-          {questions.map((question) => (
-            <QuestionStep key={question.id} question={question} />
-          ))}
+          {questions.map((question, index) => {
+            console.log('[PersonalPlan] Rendering question:', {
+              index,
+              id: question.id,
+              title: question.title
+            });
+            return (
+              <QuestionStep key={question.id} question={question} />
+            );
+          })}
         </FormContainer>
       </FormProvider>
     </div>

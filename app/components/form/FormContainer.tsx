@@ -1,4 +1,4 @@
-import { ReactNode, Children, isValidElement, useEffect, useCallback } from 'react';
+import { ReactNode, Children, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { useForm } from './FormContext';
@@ -19,60 +19,45 @@ export function FormContainer({ children }: FormContainerProps) {
 
   // Convert children to array and get current child
   const childrenArray = Children.toArray(children);
-  console.log('[FormContainer] Initial render:', {
-    childrenCount: childrenArray.length,
+  const currentChild = childrenArray[currentStep - 1];
+
+  console.log('[FormContainer] Rendering:', {
     currentStep,
     totalSteps,
-    isLoading,
-    hasUnsavedChanges,
-    hasNextHandler: !!goToNextStep,
-    hasPrevHandler: !!goToPreviousStep
+    childrenCount: childrenArray.length,
+    hasCurrentChild: !!currentChild,
+    currentChildType: currentChild ? (currentChild as any).type?.name : 'unknown'
   });
-  
-  const currentChild = childrenArray[currentStep - 1];
 
   const handleNext = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     console.log('[FormContainer] Next button clicked:', {
       currentStep,
       totalSteps,
-      hasNextHandler: !!goToNextStep
+      childrenCount: childrenArray.length
     });
     
     if (goToNextStep) {
       goToNextStep();
-    } else {
-      console.error('[FormContainer] goToNextStep is undefined');
     }
-  }, [currentStep, totalSteps, goToNextStep]);
+  }, [currentStep, totalSteps, goToNextStep, childrenArray.length]);
 
   const handlePrevious = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log('[FormContainer] Previous button clicked:', {
-      currentStep,
-      hasPrevHandler: !!goToPreviousStep
-    });
-    
     if (goToPreviousStep) {
       goToPreviousStep();
-    } else {
-      console.error('[FormContainer] goToPreviousStep is undefined');
     }
-  }, [currentStep, goToPreviousStep]);
+  }, [goToPreviousStep]);
 
   // Log state changes
   useEffect(() => {
     console.log('[FormContainer] State changed:', {
       currentStep,
       totalSteps,
-      isLoading,
-      hasUnsavedChanges,
       childrenCount: childrenArray.length,
-      hasCurrentChild: !!currentChild,
-      hasNextHandler: !!goToNextStep,
-      hasPrevHandler: !!goToPreviousStep
+      hasCurrentChild: !!currentChild
     });
-  }, [currentStep, totalSteps, isLoading, hasUnsavedChanges, childrenArray.length, currentChild, goToNextStep, goToPreviousStep]);
+  }, [currentStep, totalSteps, childrenArray.length, currentChild]);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] w-full max-w-3xl mx-auto px-8 flex flex-col">
@@ -101,13 +86,14 @@ export function FormContainer({ children }: FormContainerProps) {
       {/* Form content */}
       <div className="flex-grow flex flex-col">
         <div className="flex-grow py-12">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={currentStep}
-              initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="h-full"
             >
               {currentChild}
             </motion.div>
@@ -115,15 +101,7 @@ export function FormContainer({ children }: FormContainerProps) {
         </div>
 
         {/* Navigation buttons */}
-        <div 
-          className="py-8 flex justify-between gap-4"
-          onClick={(e) => {
-            console.log('[FormContainer] Navigation buttons container clicked:', {
-              target: e.target,
-              currentTarget: e.currentTarget
-            });
-          }}
-        >
+        <div className="py-8 flex justify-between gap-4">
           <Button
             onClick={handlePrevious}
             disabled={currentStep === 1}
@@ -134,10 +112,7 @@ export function FormContainer({ children }: FormContainerProps) {
             Previous
           </Button>
           <Button
-            onClick={(e) => {
-              console.log('[FormContainer] Next button clicked directly');
-              handleNext(e);
-            }}
+            onClick={handleNext}
             disabled={currentStep === totalSteps}
             isLoading={isLoading}
             size="lg"

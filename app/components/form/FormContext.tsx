@@ -97,15 +97,14 @@ export function FormProvider({
   }, []);
 
   const goToNextStep = useCallback(() => {
-    console.log('[FormProvider] goToNextStep called:', {
-      currentStep: state.currentStep,
-      totalSteps
-    });
-
     setState(prev => {
-      if (prev.currentStep < totalSteps) {
-        const nextStep = prev.currentStep + 1;
-        console.log('[FormProvider] Updating to next step:', nextStep);
+      const nextStep = prev.currentStep + 1;
+      if (nextStep <= totalSteps) {
+        console.log('[FormProvider] Moving to next step:', {
+          from: prev.currentStep,
+          to: nextStep,
+          totalSteps
+        });
         return {
           ...prev,
           currentStep: nextStep,
@@ -114,7 +113,7 @@ export function FormProvider({
       console.log('[FormProvider] Already at last step');
       return prev;
     });
-  }, [state.currentStep, totalSteps]);
+  }, [totalSteps]);
 
   const goToPreviousStep = useCallback(() => {
     console.log('[FormProvider] Going to previous step:', {

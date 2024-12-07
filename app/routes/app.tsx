@@ -17,7 +17,12 @@ export async function loader({ request }: DataFunctionArgs) {
         user: {
           id: userId,
           email: 'ben@qstn.us',
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
+          aud: 'authenticated',
+          app_metadata: {},
+          user_metadata: {},
+          role: 'authenticated',
+          updated_at: new Date().toISOString()
         }
       });
     }

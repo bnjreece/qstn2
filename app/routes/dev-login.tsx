@@ -6,22 +6,13 @@ import { redirect } from "@remix-run/node";
 
 // Block access in production
 export const loader: LoaderFunction = async () => {
-  console.log('Dev login loader - Environment:', {
-    NODE_ENV: process.env.NODE_ENV,
-    isDevelopment: process.env.NODE_ENV === 'development'
-  });
-
   if (process.env.NODE_ENV === "production") {
-    console.log('Dev login loader - Production mode, redirecting to /auth/login');
     return redirect("/auth/login");
   }
-
-  console.log('Dev login loader - Development mode, allowing access');
   return null;
 };
 
 export default function DevLogin() {
-  console.log('Dev login component rendering');
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md">
@@ -40,16 +31,8 @@ export default function DevLogin() {
 }
 
 export const action: ActionFunction = async () => {
-  console.log('Dev login action - Environment:', {
-    NODE_ENV: process.env.NODE_ENV,
-    isDevelopment: process.env.NODE_ENV === 'development'
-  });
-
   if (process.env.NODE_ENV === "production") {
-    console.log('Dev login action - Production mode, redirecting to /auth/login');
     return redirect("/auth/login");
   }
-
-  console.log('Dev login action - Creating development session');
   return createUserSession("379d1265-0faf-450d-9421-d601474f19cb", "/app");
 } 

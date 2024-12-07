@@ -33,37 +33,6 @@ const storage = createCookieSessionStorage({
   },
 });
 
-function getBaseUrl() {
-  const vercelUrl = process.env.VERCEL_URL;
-  const nodeEnv = process.env.NODE_ENV;
-  const productionUrl = 'qstn2.vercel.app'; // Your main production URL
-  
-  // Log all relevant environment variables
-  console.log('\n=== URL Configuration ===');
-  console.log({
-    VERCEL_URL: vercelUrl,
-    NODE_ENV: nodeEnv,
-    IS_PRODUCTION: nodeEnv === 'production',
-    USING_PRODUCTION_URL: !vercelUrl && nodeEnv === 'production'
-  });
-  console.log('=================\n');
-
-  // In production, use VERCEL_URL or fallback to production URL
-  if (nodeEnv === 'production') {
-    // Ensure we're using the full URL with https protocol
-    const domain = vercelUrl || productionUrl;
-    // If the URL already includes the protocol, use it as is
-    if (domain.startsWith('http')) {
-      return domain;
-    }
-    return `https://${domain}`;
-  }
-
-  // Fallback to localhost for development
-  const port = process.env.PORT || 3000;
-  return `http://localhost:${port}`;
-}
-
 export async function createUserSession(userId: string, redirectTo: string) {
   logAuthEvent('Creating user session', { userId, redirectTo });
   const session = await storage.getSession();

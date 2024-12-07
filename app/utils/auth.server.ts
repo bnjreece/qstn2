@@ -111,12 +111,12 @@ export async function sendMagicLink(email: string) {
   logAuthEvent('Sending magic link', { email });
   
   // In production, always use www.qstn.co
-  // In development, use localhost
+  // In development, use localhost:3000 with http protocol
   const productionUrl = process.env.NODE_ENV === 'production' 
-    ? 'www.qstn.co'
-    : 'localhost:3000';
+    ? 'https://www.qstn.co'
+    : 'http://localhost:3000';
     
-  const redirectTo = `https://${productionUrl}/auth/callback`;
+  const redirectTo = `${productionUrl}/auth/callback`;
   
   // Log URL configuration for debugging
   console.log('\n=== Magic Link Configuration ===');

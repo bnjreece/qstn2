@@ -65,7 +65,7 @@ http://localhost:3000/auth/callback
   - Primary: `www.qstn.co`
   - Redirects: `qstn.co` → `www.qstn.co`
 
-## Current State
+## Current State v2
 
 ### Authentication (Completed)
 - Magic link flow using Supabase

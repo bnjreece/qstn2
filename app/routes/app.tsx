@@ -1,7 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 import type { DataFunctionArgs } from "@remix-run/node";
 import { Outlet, useLoaderData, isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { requireUserId } from "~/utils/auth.server";
+import { requireUserId, logout } from "~/utils/auth.server";
 import { supabase } from "~/utils/supabase.server";
 import { AppHeader } from "~/components/layout/AppHeader";
 import type { AuthLoaderData } from "~/types/auth";
@@ -32,18 +32,24 @@ export async function loader({ request }: DataFunctionArgs) {
     
     if (sessionError) {
       console.error("Failed to get Supabase session:", sessionError);
-      return redirect("/auth/login");
+      return logout(request);
     }
 
     if (!session?.user) {
       console.log("No Supabase session found");
-      return redirect("/auth/login");
+      return logout(request);
+    }
+
+    // Verify the user IDs match
+    if (session.user.id !== userId) {
+      console.log("Session user ID mismatch");
+      return logout(request);
     }
 
     return json<AuthLoaderData>({ user: session.user });
   } catch (error) {
     console.error("App layout loader error:", error);
-    return redirect("/auth/login");
+    return logout(request);
   }
 }
 

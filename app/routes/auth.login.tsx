@@ -1,7 +1,7 @@
 import { json, redirect, type DataFunctionArgs } from "@remix-run/node";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useState, useEffect } from "react";
-import { sendMagicLink, getUserSession } from "~/utils/auth.server";
+import { sendMagicLink, getUserSession, logout } from "~/utils/auth.server";
 import { supabase } from "~/utils/supabase.server";
 
 interface SuccessResponse {
@@ -31,20 +31,36 @@ export async function loader({ request }: DataFunctionArgs) {
     isDevelopment: process.env.NODE_ENV === 'development'
   });
 
-  // Check if user is already logged in
-  const { userId } = await getUserSession(request);
-  if (userId) {
-    console.log('Auth login loader - User already logged in, redirecting to /app');
-    return redirect("/app");
-  }
+  try {
+    // Check server-side session first
+    const { userId } = await getUserSession(request);
+    
+    // If we have a server-side session, verify Supabase session
+    if (userId) {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      // Only redirect if we have both server-side and Supabase session
+      if (session?.user) {
+        console.log('Auth login loader - Both sessions valid, redirecting to /app');
+        return redirect("/app");
+      }
+      
+      // If server session exists but no Supabase session, clear server session
+      console.log('Auth login loader - Server session exists but no Supabase session, clearing session');
+      return logout(request);
+    }
 
-  // In development, redirect to dev login
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Auth login loader - Development mode, redirecting to /dev-login');
-    return redirect('/dev-login');
-  }
+    // In development, redirect to dev login
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Auth login loader - Development mode, redirecting to /dev-login');
+      return redirect('/dev-login');
+    }
 
-  return json({});
+    return json({});
+  } catch (error) {
+    console.error('Auth login loader error:', error);
+    return json({});
+  }
 }
 
 export async function action({ request }: DataFunctionArgs) {

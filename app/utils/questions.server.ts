@@ -1,11 +1,20 @@
 import { supabase } from "./supabase.server";
 
+export type QuestionType = 
+  | 'mission'
+  | 'vision'
+  | 'values'
+  | 'long_term_aspirations'
+  | 'one_year_activities'
+  | 'ninety_day_start'
+  | 'ninety_day_stop';
+
 export interface Question {
   id: string;
   title: string;
   description: string | null;
   tips: string[];
-  type: string;
+  type: QuestionType;
   order_index: number;
   is_active: boolean;
   created_at: string;
@@ -31,7 +40,7 @@ export async function getActiveQuestions() {
     .order('order_index');
 
   if (error) {
-    console.error('Error fetching questions:', error);
+    console.error('[QuestionUtils] Error fetching questions:', error);
     throw new Error('Failed to fetch questions');
   }
 
@@ -39,7 +48,64 @@ export async function getActiveQuestions() {
 }
 
 /**
- * Fetch a specific question by ID, including its dependencies
+ * Fetch questions by type
+ */
+export async function getQuestionsByType(type: QuestionType) {
+  const { data: questions, error } = await supabase
+    .from('questions')
+    .select('*')
+    .eq('type', type)
+    .eq('is_active', true)
+    .order('order_index');
+
+  if (error) {
+    console.error(`[QuestionUtils] Error fetching ${type} questions:`, error);
+    throw new Error(`Failed to fetch ${type} questions`);
+  }
+
+  return questions as Question[];
+}
+
+/**
+ * Fetch basic questions (mission, vision, values)
+ */
+export async function getBasicQuestions() {
+  const { data: questions, error } = await supabase
+    .from('questions')
+    .select('*')
+    .in('type', ['mission', 'vision', 'values'])
+    .eq('is_active', true)
+    .order('order_index');
+
+  if (error) {
+    console.error('[QuestionUtils] Error fetching basic questions:', error);
+    throw new Error('Failed to fetch basic questions');
+  }
+
+  return questions as Question[];
+}
+
+/**
+ * Fetch questions by timeframe (10-25yr, 1yr, 90day)
+ */
+export async function getQuestionsByTimeframe(timeframe: 'long_term_aspirations' | 'one_year_activities' | 'ninety_day_start' | 'ninety_day_stop') {
+  const { data: questions, error } = await supabase
+    .from('questions')
+    .select('*')
+    .eq('type', timeframe)
+    .eq('is_active', true)
+    .order('order_index');
+
+  if (error) {
+    console.error(`[QuestionUtils] Error fetching ${timeframe} questions:`, error);
+    throw new Error(`Failed to fetch ${timeframe} questions`);
+  }
+
+  return questions as Question[];
+}
+
+/**
+ * Get a specific question and its dependencies
  */
 export async function getQuestionWithDependencies(questionId: string) {
   const { data: question, error: questionError } = await supabase
@@ -49,7 +115,7 @@ export async function getQuestionWithDependencies(questionId: string) {
     .single();
 
   if (questionError) {
-    console.error('Error fetching question:', questionError);
+    console.error('[QuestionUtils] Error fetching question:', questionError);
     throw new Error('Failed to fetch question');
   }
 
@@ -59,7 +125,7 @@ export async function getQuestionWithDependencies(questionId: string) {
     .eq('question_id', questionId);
 
   if (dependencyError) {
-    console.error('Error fetching dependencies:', dependencyError);
+    console.error('[QuestionUtils] Error fetching dependencies:', dependencyError);
     throw new Error('Failed to fetch question dependencies');
   }
 
@@ -78,6 +144,7 @@ export async function getNextQuestion(currentQuestionId: string, answers: Record
   const currentIndex = questions.findIndex(q => q.id === currentQuestionId);
   
   if (currentIndex === -1) {
+    console.error('[QuestionUtils] Current question not found:', currentQuestionId);
     throw new Error('Current question not found');
   }
 
@@ -94,7 +161,7 @@ export async function getNextQuestion(currentQuestionId: string, answers: Record
     .eq('question_id', nextQuestion.id);
 
   if (error) {
-    console.error('Error fetching dependencies:', error);
+    console.error('[QuestionUtils] Error fetching dependencies:', error);
     throw new Error('Failed to fetch question dependencies');
   }
 
@@ -112,5 +179,49 @@ export async function getNextQuestion(currentQuestionId: string, answers: Record
     return answer === condition.value;
   });
 
+  if (!areDependenciesSatisfied) {
+    console.log('[QuestionUtils] Dependencies not satisfied for question:', nextQuestion.id);
+  }
+
   return areDependenciesSatisfied ? nextQuestion : null;
+}
+
+/**
+ * Get all answers for a user
+ */
+export async function getUserAnswers(userId: string) {
+  const { data: answers, error } = await supabase
+    .from('answers')
+    .select('*')
+    .eq('user_id', userId);
+
+  if (error) {
+    console.error('[QuestionUtils] Error fetching user answers:', error);
+    throw new Error('Failed to fetch user answers');
+  }
+
+  return answers;
+}
+
+/**
+ * Save an answer for a question
+ */
+export async function saveAnswer(userId: string, questionId: string, answer: string) {
+  const { data, error } = await supabase
+    .from('answers')
+    .upsert({
+      user_id: userId,
+      question_id: questionId,
+      answer,
+      updated_at: new Date().toISOString()
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('[QuestionUtils] Error saving answer:', error);
+    throw new Error('Failed to save answer');
+  }
+
+  return data;
 } 

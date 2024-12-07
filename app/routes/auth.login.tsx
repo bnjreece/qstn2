@@ -1,8 +1,7 @@
-import React from 'react';
 import { json, redirect, type DataFunctionArgs } from "@remix-run/node";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useState, useEffect } from "react";
-import { sendMagicLink } from "~/utils/auth.server";
+import { sendMagicLink, getUserSession } from "~/utils/auth.server";
 import { supabase } from "~/utils/supabase.server";
 
 interface SuccessResponse {
@@ -27,20 +26,24 @@ function isSuccess(data: ActionData): data is SuccessResponse {
 }
 
 export async function loader({ request }: DataFunctionArgs) {
-  // Check if we already have a session
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-  
-  // Only redirect if we have a valid session
-  if (session?.user && !sessionError) {
-    console.log("Found existing session for user:", session.user.email);
+  console.log('Auth login loader - Environment:', {
+    NODE_ENV: process.env.NODE_ENV,
+    isDevelopment: process.env.NODE_ENV === 'development'
+  });
+
+  // Check if user is already logged in
+  const { userId } = await getUserSession(request);
+  if (userId) {
+    console.log('Auth login loader - User already logged in, redirecting to /app');
     return redirect("/app");
   }
-  
-  // Otherwise, show the login page
-  if (sessionError) {
-    console.error("Session check error:", sessionError);
+
+  // In development, redirect to dev login
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Auth login loader - Development mode, redirecting to /dev-login');
+    return redirect('/dev-login');
   }
-  
+
   return json({});
 }
 

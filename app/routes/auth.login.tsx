@@ -30,11 +30,15 @@ export async function loader({ request }: DataFunctionArgs) {
   // Check if we already have a session
   const { data: { session }, error: sessionError } = await supabase.auth.getSession();
   
-  if (sessionError) {
-    console.error("Session check error:", sessionError);
-  } else if (session?.user) {
+  // Only redirect if we have a valid session
+  if (session?.user && !sessionError) {
     console.log("Found existing session for user:", session.user.email);
     return redirect("/app");
+  }
+  
+  // Otherwise, show the login page
+  if (sessionError) {
+    console.error("Session check error:", sessionError);
   }
   
   return json({});

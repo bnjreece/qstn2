@@ -16,7 +16,7 @@ export async function loader({ request }: DataFunctionArgs) {
     
     if (sessionError) {
       console.error("Failed to get Supabase session:", sessionError);
-      throw sessionError;
+      return redirect("/auth/login");
     }
 
     if (!session?.user) {

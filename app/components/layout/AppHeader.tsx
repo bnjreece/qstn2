@@ -1,4 +1,4 @@
-import { Form, Link, useLocation, useSearchParams } from "@remix-run/react";
+import { Form, Link, useLocation } from "@remix-run/react";
 import type { User } from '@supabase/supabase-js';
 
 interface AppHeaderProps {
@@ -7,15 +7,7 @@ interface AppHeaderProps {
 
 export function AppHeader({ user }: AppHeaderProps) {
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
   const isPersonalPlan = location.pathname === '/app/personal-plan';
-
-  const handleNextClick = (e: React.MouseEvent) => {
-    console.log('[AppHeader] Test next button clicked');
-    const currentStep = parseInt(searchParams.get('step') || '1');
-    const nextStep = currentStep + 1;
-    setSearchParams({ step: nextStep.toString() });
-  };
 
   return (
     <nav className="bg-white shadow-sm">
@@ -34,15 +26,6 @@ export function AppHeader({ user }: AppHeaderProps) {
               >
                 Personal Plan
               </Link>
-              {isPersonalPlan && (
-                <button
-                  type="button"
-                  onClick={handleNextClick}
-                  className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                >
-                  Test Next (Header)
-                </button>
-              )}
             </div>
           </div>
           <div className="flex items-center">

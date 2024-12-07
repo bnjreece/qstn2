@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useState, useCallback } from 'react';
+import { createContext, useContext, ReactNode, useState, useCallback, useEffect } from 'react';
 
 interface FormState {
   currentStep: number;
@@ -38,18 +38,24 @@ export function FormProvider({
     hasUnsavedChanges: false,
   });
 
+  useEffect(() => {
+    console.log('Form state updated:', state);
+    console.log('Total steps:', totalSteps);
+  }, [state, totalSteps]);
+
   const setCurrentStep = useCallback((step: number) => {
+    console.log('Setting current step to:', step);
     setState(prev => ({ ...prev, currentStep: step }));
   }, []);
 
   const updateFormData = useCallback(async (sectionId: string, data: any) => {
+    console.log('Updating form data:', { sectionId, data });
     setState(prev => ({
       ...prev,
       formData: { ...prev.formData, [sectionId]: data },
       hasUnsavedChanges: true,
     }));
 
-    // Autosave if onSave is provided
     if (onSave) {
       setState(prev => ({ ...prev, isLoading: true }));
       try {
@@ -68,31 +74,37 @@ export function FormProvider({
   }, []);
 
   const goToNextStep = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      currentStep: Math.min(prev.currentStep + 1, totalSteps),
-    }));
-  }, [totalSteps]);
+    console.log('Going to next step from:', state.currentStep, 'total:', totalSteps);
+    if (state.currentStep < totalSteps) {
+      setState(prev => ({
+        ...prev,
+        currentStep: prev.currentStep + 1,
+      }));
+    }
+  }, [state.currentStep, totalSteps]);
 
   const goToPreviousStep = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      currentStep: Math.max(prev.currentStep - 1, 1),
-    }));
-  }, []);
+    console.log('Going to previous step from:', state.currentStep);
+    if (state.currentStep > 1) {
+      setState(prev => ({
+        ...prev,
+        currentStep: prev.currentStep - 1,
+      }));
+    }
+  }, [state.currentStep]);
+
+  const value = {
+    ...state,
+    setCurrentStep,
+    updateFormData,
+    setIsLoading,
+    goToNextStep,
+    goToPreviousStep,
+    totalSteps,
+  };
 
   return (
-    <FormContext.Provider
-      value={{
-        ...state,
-        setCurrentStep,
-        updateFormData,
-        setIsLoading,
-        goToNextStep,
-        goToPreviousStep,
-        totalSteps,
-      }}
-    >
+    <FormContext.Provider value={value}>
       {children}
     </FormContext.Provider>
   );

@@ -318,3 +318,166 @@ module.exports = {
    - Follow existing component patterns
    - Maintain responsive design
    - Use CSS transitions for smooth UX 
+
+## Styling Architecture
+
+### Directory Structure
+```
+app/
+├── styles/
+│   ├── tailwind.css     # Main Tailwind imports and component classes
+│   └── global.css       # Global styles and CSS resets
+├── components/
+│   ├── ui/             # Reusable UI components
+│   │   └── Button.tsx   # Example: Base button component
+│   └── layout/         # Layout components
+└── routes/            # Route components
+```
+
+### Styling Hierarchy
+1. **Base Styles** (`app/styles/global.css`)
+   - CSS resets
+   - Root variables
+   - Base element styles
+   - Font imports
+
+2. **Component Classes** (`app/styles/tailwind.css`)
+   - Reusable component patterns
+   - Custom utility patterns
+   - Layout patterns
+
+3. **Utility Classes** (in components)
+   - Direct Tailwind utilities
+   - Component-specific styles
+
+### Component Style Guidelines
+
+1. **Layout Components**
+   - Use semantic HTML
+   - Mobile-first responsive design
+   - Container patterns for consistent spacing
+   ```tsx
+   <div className="min-h-screen bg-ui-light">
+     <div className="w-full max-w-4xl mx-auto px-8 py-12">
+       {children}
+     </div>
+   </div>
+   ```
+
+2. **UI Components**
+   - Composition over inheritance
+   - Props for variants
+   - Consistent class ordering:
+     1. Layout (position, display, width, height)
+     2. Spacing (margin, padding)
+     3. Typography
+     4. Visual (colors, borders, shadows)
+     5. Interactive states
+   ```tsx
+   <button className={twMerge(
+     // Base styles
+     "inline-flex items-center justify-center",
+     "px-6 py-3",
+     "text-base font-medium",
+     "rounded-md bg-primary text-white",
+     "hover:bg-primary-dark focus:ring-2",
+     // Variant styles
+     variantStyles[variant],
+     className
+   )}>
+   ```
+
+### Color System
+
+1. **Semantic Color Tokens**
+   ```js
+   colors: {
+     // Brand Colors
+     'primary': '#906D22',
+     'primary-dark': '#785A1C',
+     'secondary': '#FBB626',
+     'tertiary': '#DC641F',
+     'quaternary': '#983712',
+     
+     // UI Colors
+     'ui': {
+       light: '#F5F3F0',
+       dark: '#2A2520',
+     },
+     
+     // Text Colors
+     'text': {
+       primary: '#3F1A0B',
+       secondary: '#2A2520',
+       muted: 'rgba(42, 37, 32, 0.6)',
+     },
+     
+     // Feedback Colors
+     'status': {
+       success: '#2D7D76',
+       error: '#983712',
+       warning: '#DC641F',
+     }
+   }
+   ```
+
+2. **Color Usage**
+   - Use semantic color names in components
+   - Consistent opacity values (10%, 20%, 60%, etc.)
+   - Document color purpose in comments
+
+### Typography System
+
+1. **Font Scale**
+   ```js
+   fontSize: {
+     'xs': ['0.75rem', { lineHeight: '1rem' }],
+     'sm': ['0.875rem', { lineHeight: '1.25rem' }],
+     'base': ['1rem', { lineHeight: '1.5rem' }],
+     'lg': ['1.125rem', { lineHeight: '1.75rem' }],
+     'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+     '2xl': ['1.5rem', { lineHeight: '2rem' }],
+     '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+     '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+     '5xl': ['3rem', { lineHeight: '1.16' }],
+   }
+   ```
+
+2. **Typography Classes**
+   ```css
+   .heading-1 {
+     @apply text-4xl font-serif text-text-primary;
+   }
+   .text-body {
+     @apply text-base font-serif text-text-secondary;
+   }
+   ```
+
+### Best Practices
+
+1. **Component Organization**
+   - Keep styles close to components
+   - Use composition for complex components
+   - Extract common patterns to component classes
+
+2. **Responsive Design**
+   - Mobile-first approach
+   - Use standard breakpoints
+   - Fluid typography when appropriate
+
+3. **Performance**
+   - Minimize CSS-in-JS usage
+   - Use Tailwind's JIT mode
+   - Purge unused styles in production
+
+4. **Accessibility**
+   - Maintain color contrast (WCAG 2.1)
+   - Use semantic HTML elements
+   - Support reduced motion
+   - Keyboard navigation
+
+5. **State Management**
+   - Consistent hover/focus states
+   - Loading states for all interactive elements
+   - Error states with clear feedback
+   - Disabled states with visual indication

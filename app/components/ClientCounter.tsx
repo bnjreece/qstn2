@@ -18,7 +18,7 @@ function Counter() {
 
   console.log('[Counter] Rendering with count:', count);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     console.log('[Counter] Click handler called, current count:', count);
     setCount(prev => {

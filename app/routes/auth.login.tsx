@@ -213,12 +213,20 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow">
-        <div>
-          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
-            Sign in to your account
+    <div className="flex min-h-screen items-center justify-center bg-ui-light">
+      <div className="w-full max-w-md space-y-8 rounded-lg bg-white/50 backdrop-blur-sm p-8 shadow-lg border border-primary/10">
+        <div className="text-center space-y-6">
+          <img 
+            src="/images/qstn-logo.png" 
+            alt="QSTN" 
+            className="h-12 w-auto mx-auto" 
+          />
+          <h2 className="text-4xl font-serif text-text-primary">
+            Reveal your story
           </h2>
+          <p className="text-text-secondary/60 text-lg font-serif">
+            Start with your email—we'll save your progress
+          </p>
         </div>
 
         {/* Session Info (Development Only) */}
@@ -289,7 +297,7 @@ export default function Login() {
 
         <Form method="post" className="mt-8 space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-serif text-text-secondary">
               Email address
             </label>
             <div className="mt-1">
@@ -299,7 +307,7 @@ export default function Login() {
                 type="email"
                 autoComplete="email"
                 required
-                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                className="input"
               />
             </div>
           </div>
@@ -308,15 +316,15 @@ export default function Login() {
             <button
               type="submit"
               disabled={cooldown > 0}
-              className={`group relative flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+              className={`group relative flex w-full justify-center rounded-md border border-transparent px-4 py-3 text-base font-serif text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                 cooldown > 0 
-                  ? 'bg-indigo-400 cursor-not-allowed' 
-                  : 'bg-indigo-600 hover:bg-indigo-700'
+                  ? 'bg-primary/50 cursor-not-allowed' 
+                  : 'bg-primary hover:bg-primary-dark'
               }`}
             >
               {cooldown > 0 
                 ? `Wait ${cooldown}s before requesting again` 
-                : 'Send me a login link'}
+                : 'Continue with email'}
             </button>
           </div>
         </Form>

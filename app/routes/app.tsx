@@ -58,7 +58,7 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-ui-light flex items-center justify-center">
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <h1 className="text-2xl font-bold text-red-600 mb-4">
             {error.status} {error.statusText}
@@ -76,7 +76,7 @@ export function ErrorBoundary() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-ui-light flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold text-red-600 mb-4">
           Something went wrong
@@ -104,7 +104,7 @@ export default function AppLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-ui-light">
       <AppHeader user={data.user} />
       <main className="py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -26,9 +26,9 @@ export function FormSection({
   return (
     <div className="space-y-12">
       <div className="space-y-4">
-        <h2 className="text-4xl font-light text-gray-900">{title}</h2>
+        <h2 className="text-4xl font-light text-dark">{title}</h2>
         {description && (
-          <p className="text-xl font-light text-gray-600">{description}</p>
+          <p className="text-xl font-light text-ui-dark/70">{description}</p>
         )}
       </div>
 
@@ -40,12 +40,12 @@ export function FormSection({
       </div>
 
       {tips.length > 0 && (
-        <div className="bg-gray-50 rounded-lg p-6">
-          <h3 className="text-sm font-medium text-gray-900 mb-3">Tips</h3>
+        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-6 border border-primary/10">
+          <h3 className="text-sm font-medium text-dark mb-3">Tips</h3>
           <ul className="space-y-2">
             {tips.map((tip, index) => (
-              <li key={index} className="flex items-start text-gray-600">
-                <span className="mr-2">•</span>
+              <li key={index} className="flex items-start text-ui-dark/70">
+                <span className="mr-2 text-primary">•</span>
                 <span>{tip}</span>
               </li>
             ))}

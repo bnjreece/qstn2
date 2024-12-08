@@ -8,7 +8,7 @@
   }
   
   body {
-    @apply font-serif text-ui-dark bg-ui-light;
+    @apply font-serif text-text-secondary bg-ui-light;
   }
 }
 
@@ -18,19 +18,19 @@
   }
 
   .btn-primary {
-    @apply bg-[rgb(220,100,31)] text-white hover:bg-[rgb(200,90,28)] focus:ring-[rgb(220,100,31)];
+    @apply bg-primary text-white hover:bg-primary-dark focus:ring-primary;
   }
 
   .btn-secondary {
-    @apply bg-white text-dark border-2 border-primary/20 hover:bg-primary/5 focus:ring-primary;
+    @apply bg-white text-text-primary border-2 border-primary/20 hover:bg-primary/5 focus:ring-primary;
   }
 
   .btn-text {
-    @apply text-sm font-serif text-ui-dark/70 hover:text-primary transition-colors px-3 py-1 rounded-full hover:bg-primary/5;
+    @apply text-sm font-serif text-text-muted hover:text-primary transition-colors px-3 py-1 rounded-full hover:bg-primary/5;
   }
 
   .nav-link {
-    @apply inline-flex items-center px-1 pt-1 text-sm font-serif tracking-wide text-ui-dark/70 hover:text-primary border-b-2 border-transparent hover:border-primary/30 transition-all;
+    @apply inline-flex items-center px-1 pt-1 text-sm font-serif tracking-wide text-text-muted hover:text-primary border-b-2 border-transparent hover:border-primary/30 transition-all;
   }
 
   .nav-link-active {
@@ -42,7 +42,7 @@
   }
 
   .input {
-    @apply w-full bg-white/50 backdrop-blur-sm border-2 rounded-lg border-secondary/20 p-4 font-serif text-dark placeholder:text-primary/40 focus:outline-none focus:ring-0 focus:border-secondary shadow-sm;
+    @apply w-full bg-white/50 backdrop-blur-sm border-2 rounded-lg border-secondary/20 p-4 font-serif text-text-primary placeholder:text-primary/40 focus:outline-none focus:ring-0 focus:border-secondary shadow-sm;
   }
 
   .progress-bar {
@@ -54,14 +54,14 @@
   }
 
   .heading-1 {
-    @apply text-4xl font-serif text-primary;
+    @apply text-4xl font-serif text-text-primary;
   }
 
   .heading-2 {
-    @apply text-2xl font-serif text-dark;
+    @apply text-2xl font-serif text-text-primary;
   }
 
   .text-body {
-    @apply text-base font-serif text-dark/70 leading-relaxed;
+    @apply text-base font-serif text-text-secondary leading-relaxed;
   }
 } 

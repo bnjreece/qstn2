@@ -11,6 +11,12 @@ export async function loader({ request }: DataFunctionArgs) {
     // First check if we have a server-side session
     const userId = await requireUserId(request);
     
+    // Redirect to personal plan if we're at the root app path
+    const url = new URL(request.url);
+    if (url.pathname === '/app') {
+      return redirect('/app/personal-plan');
+    }
+    
     // In development, bypass Supabase session check
     if (process.env.NODE_ENV === 'development') {
       return json<AuthLoaderData>({ 
@@ -106,7 +112,7 @@ export default function AppLayout() {
   return (
     <div className="min-h-screen bg-ui-light">
       <AppHeader user={data.user} />
-      <main className="py-10">
+      <main className="py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Outlet context={data} />
         </div>

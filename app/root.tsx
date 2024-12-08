@@ -61,6 +61,7 @@ export const links: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+    crossOrigin: "anonymous"
   },
   { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
 ];
@@ -78,79 +79,22 @@ export default function App(): JSX.Element {
     }
   }, []);
 
+  const isNavigating = navigation.state !== "idle";
+
   return (
-    <html lang="en" className="h-full bg-ui-light">
+    <html lang="en" className="h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              console.log('[Head Script] Starting...');
-              window.addEventListener('DOMContentLoaded', () => {
-                console.log('[Head Script] DOM Content Loaded');
-              });
-              window.addEventListener('load', () => {
-                console.log('[Head Script] Window Loaded');
-              });
-            `,
-          }}
-        />
       </head>
-      <body className="h-full m-0">
+      <body className={`h-full transition-opacity duration-200 ${isNavigating ? 'opacity-50' : 'opacity-100'}`}>
         <Outlet />
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.env = ${JSON.stringify(data.ENV)};`,
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              console.log('[Body Script] Starting...');
-              
-              // Test basic JavaScript functionality
-              window.testJS = {
-                log: function(message) {
-                  console.log('[Test JS]', message);
-                },
-                alert: function(message) {
-                  alert(message);
-                },
-                click: function(element) {
-                  console.log('[Test JS] Clicked:', element);
-                  this.alert('Clicked: ' + element);
-                }
-              };
-
-              // Add click handlers after DOM is ready
-              document.addEventListener('DOMContentLoaded', () => {
-                console.log('[Body Script] Adding click handlers...');
-                
-                // Capture phase to log all clicks
-                document.addEventListener('click', (e) => {
-                  console.log('[Body Script] Click captured:', {
-                    target: e.target,
-                    defaultPrevented: e.defaultPrevented,
-                    phase: 'capture'
-                  });
-                }, true);
-
-                // Bubble phase to log unhandled clicks
-                document.addEventListener('click', (e) => {
-                  console.log('[Body Script] Click bubbled:', {
-                    target: e.target,
-                    defaultPrevented: e.defaultPrevented,
-                    phase: 'bubble'
-                  });
-                }, false);
-              });
-
-              console.log('[Body Script] Setup complete');
-            `,
           }}
         />
         <Scripts />

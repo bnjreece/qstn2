@@ -8,7 +8,7 @@ export async function loader({ request }: DataFunctionArgs) {
 
 export default function AppIndex() {
   return (
-    <div className="py-10 bg-ui-light min-h-screen">
+    <div className="py-10 min-h-screen">
       <header>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center text-center">
@@ -24,14 +24,14 @@ export default function AppIndex() {
       <main>
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="px-4 py-8 sm:px-0">
-            <div className="border-2 border-primary/20 rounded-lg p-8 bg-white">
+            <div className="card p-8 border-2 border-primary/20">
               <div className="text-center">
-                <h3 className="mt-2 text-lg font-serif text-dark">No documents</h3>
-                <p className="mt-1 text-base font-serif text-ui-dark/80">Get started by creating a new document.</p>
+                <h3 className="heading-2 mt-2">No documents</h3>
+                <p className="mt-1 text-body">Get started by creating a new document.</p>
                 <div className="mt-6">
                   <Link
                     to="new"
-                    className="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-serif rounded-md text-white bg-primary hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+                    className="btn btn-primary"
                   >
                     New Document
                   </Link>

@@ -26,11 +26,7 @@ export function AppHeader({ user }: AppHeaderProps) {
             <div className="ml-8 flex space-x-8">
               <Link
                 to="/app/personal-plan"
-                className={`inline-flex items-center px-1 pt-1 text-sm font-serif tracking-wide ${
-                  isPersonalPlan 
-                    ? 'text-primary border-b-2 border-primary font-medium' 
-                    : 'text-ui-dark/70 hover:text-primary border-b-2 border-transparent hover:border-primary/30 transition-all'
-                }`}
+                className={`nav-link ${isPersonalPlan ? 'nav-link-active' : ''}`}
               >
                 Personal Plan
               </Link>
@@ -41,7 +37,7 @@ export function AppHeader({ user }: AppHeaderProps) {
             <Form action="/auth/logout" method="post">
               <button
                 type="submit"
-                className="text-sm font-serif text-ui-dark/70 hover:text-primary transition-colors px-3 py-1 rounded-full hover:bg-primary/5"
+                className="btn-text"
               >
                 Logout
               </button>

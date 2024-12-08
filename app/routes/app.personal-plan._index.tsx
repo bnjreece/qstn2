@@ -136,13 +136,13 @@ export default function PersonalPlanQuestions() {
 
       <div className="space-y-12">
         {/* Progress indicator */}
-        <div className="h-3 bg-white/50 backdrop-blur-sm rounded-full overflow-hidden border border-secondary/20 shadow-sm">
+        <div className="progress-bar">
           <div 
-            className="h-full bg-gradient-to-r from-primary via-secondary to-tertiary transition-all duration-300"
+            className="progress-bar-fill"
             style={{ width: `${(currentStep / totalSteps) * 100}%` }}
           />
         </div>
-        <div className="text-quaternary font-serif flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <span className="text-2xl text-primary font-medium">{currentStep}</span>
           <span className="text-dark/60">of</span>
           <span className="text-tertiary">{totalSteps}</span>
@@ -150,9 +150,9 @@ export default function PersonalPlanQuestions() {
 
         {/* Question */}
         <div>
-          <h2 className="text-4xl font-serif text-primary border-b border-primary/10 pb-2">{currentQuestion.title}</h2>
+          <h2 className="heading-1 border-b border-primary/10 pb-2">{currentQuestion.title}</h2>
           {currentQuestion.description && (
-            <p className="mt-4 text-xl font-serif text-dark/70 leading-relaxed">{currentQuestion.description}</p>
+            <p className="mt-4 text-xl text-body">{currentQuestion.description}</p>
           )}
         </div>
 
@@ -161,30 +161,12 @@ export default function PersonalPlanQuestions() {
           <textarea
             name="answer"
             defaultValue={currentAnswer || ''}
-            className="w-full bg-white/50 backdrop-blur-sm text-2xl font-serif border-2 rounded-lg border-secondary/20 p-4 resize-none focus:outline-none focus:ring-0 focus:border-secondary text-dark placeholder:text-primary/40 placeholder:font-serif shadow-sm"
+            className="input text-2xl resize-none"
             placeholder="Click here and start typing..."
             rows={3}
             autoFocus
           />
         </div>
-
-        {/* Tips */}
-        {currentQuestion.tips && currentQuestion.tips.length > 0 && (
-          <div className="bg-white/50 backdrop-blur-sm rounded-lg p-6 border-l-4 border-tertiary shadow-sm">
-            <h3 className="text-sm font-serif font-medium text-quaternary mb-3 flex items-center gap-2">
-              <span className="text-tertiary text-lg">💡</span>
-              Tips
-            </h3>
-            <ul className="space-y-2">
-              {currentQuestion.tips.map((tip, index) => (
-                <li key={index} className="flex items-start text-dark/70 font-serif">
-                  <span className="mr-2 text-secondary">•</span>
-                  <span>{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         {/* Navigation */}
         <div className="flex justify-between gap-4 pt-4">
@@ -193,17 +175,35 @@ export default function PersonalPlanQuestions() {
             name="previous"
             value="true"
             disabled={currentStep === 1}
-            className="px-6 py-3 text-base font-serif rounded-md text-dark bg-white border-2 border-primary/20 hover:bg-primary/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:hover:bg-transparent shadow-sm hover:shadow-md"
+            className="btn btn-secondary disabled:opacity-50 disabled:hover:bg-transparent"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="bg-[rgb(220,100,31)] text-white px-8 py-3 text-base font-serif rounded-md shadow-lg hover:bg-[rgb(200,90,28)]"
+            className="btn btn-primary"
           >
             {currentStep === totalSteps ? 'Complete' : 'Next'}
           </button>
         </div>
+
+        {/* Tips */}
+        {currentQuestion.tips && currentQuestion.tips.length > 0 && (
+          <div className="card p-6 border-l-4 border-tertiary">
+            <h3 className="heading-2 text-sm mb-3 flex items-center gap-2">
+              <span className="text-tertiary text-lg">💡</span>
+              Tips
+            </h3>
+            <ul className="space-y-2">
+              {currentQuestion.tips.map((tip, index) => (
+                <li key={index} className="flex items-start text-body">
+                  <span className="mr-2 text-secondary">•</span>
+                  <span>{tip}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </Form>
   );

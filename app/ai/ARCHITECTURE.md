@@ -118,25 +118,13 @@ Each strategic plan consists of multiple sections, stored as JSON in document_se
 - [x] Back/Next navigation
 - [x] Mobile-friendly touch gestures
 
-#### 5. Data Management
+#### 5. Data Management & Polish
 - [ ] Setup Supabase real-time subscriptions
 - [ ] Implement autosave to document_sections
 - [ ] Add optimistic updates
 - [ ] Handle offline/error states
 - [ ] Add save indicators
-
-#### 6. Individual Sections
-- [ ] Core Values & Purpose section
-- [ ] BHAG section
-- [ ] 3-5 Year Targets section
-- [ ] Annual Goals section
-- [ ] Quarterly Priorities section
-- [ ] Weekly Rocks section
-- [ ] Daily Habits section
-
-#### 7. Polish & Optimization
 - [ ] Add keyboard navigation
-- [ ] Implement save indicators
 - [ ] Add progress persistence
 - [ ] Optimize performance
 - [ ] Add loading skeletons

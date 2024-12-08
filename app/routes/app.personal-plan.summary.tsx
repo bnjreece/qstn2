@@ -65,28 +65,28 @@ export default function PersonalPlanSummary(): ReactNode {
 
   return (
     <>
-      <h1 className="text-4xl font-light text-gray-900 mb-8">Your Personal Plan Summary</h1>
+      <h1 className="text-4xl font-light text-dark mb-8">Your Personal Plan Summary</h1>
       
       <div className="space-y-16">
         {sections.map((section) => (
           <div key={section.title} className="space-y-8">
-            <h2 className="text-3xl font-light text-gray-800">{section.title}</h2>
+            <h2 className="text-3xl font-light text-dark">{section.title}</h2>
             
             <div className="space-y-8">
               {section.questions.map(({ question, answer }) => (
-                <div key={question.id} className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 space-y-4">
+                <div key={question.id} className="bg-white rounded-lg shadow-sm border border-primary/10 p-6 space-y-4">
                   <div>
-                    <h3 className="text-xl font-medium text-gray-900">{question.title}</h3>
+                    <h3 className="text-xl font-medium text-dark">{question.title}</h3>
                     {question.description && (
-                      <p className="mt-1 text-gray-600">{question.description}</p>
+                      <p className="mt-1 text-ui-dark">{question.description}</p>
                     )}
                   </div>
 
-                  <div className="bg-gray-50 rounded p-4">
+                  <div className="bg-ui-light rounded p-4">
                     {answer ? (
-                      <div className="whitespace-pre-wrap text-gray-800">{answer}</div>
+                      <div className="whitespace-pre-wrap text-ui-dark">{answer}</div>
                     ) : (
-                      <div className="text-gray-400 italic">No answer provided</div>
+                      <div className="text-ui-dark/40 italic">No answer provided</div>
                     )}
                   </div>
                 </div>
@@ -99,7 +99,7 @@ export default function PersonalPlanSummary(): ReactNode {
       <div className="mt-12 flex justify-end">
         <Link
           to=".."
-          className="px-6 py-3 text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="px-6 py-3 text-base font-medium rounded-md text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
         >
           Edit Your Plan
         </Link>

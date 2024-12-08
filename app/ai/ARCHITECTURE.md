@@ -220,6 +220,68 @@ Each strategic plan consists of multiple sections, stored as JSON in document_se
   - Form components (to be created in `app/components/form/`)
   - Shared UI components (to be created in `app/components/ui/`)
 
+### Brand Colors and UI Guidelines
+
+#### Brand Colors
+```css
+/* Primary Colors */
+--color-primary: #906D22;    /* Deep Gold */
+--color-secondary: #FBB626;  /* Bright Yellow */
+--color-tertiary: #DC641F;   /* Burnt Orange */
+--color-quaternary: #983712; /* Deep Red/Brown */
+--color-dark: #3F1A0B;       /* Dark Brown */
+
+/* UI Colors */
+--color-ui-light: #F5F3F0;   /* Light Warm Gray */
+--color-ui-dark: #2A2520;    /* Dark Warm Gray */
+
+/* Accent Color */
+--color-accent: #2D7D76;     /* Muted Teal */
+```
+
+#### Color Usage Guidelines
+1. Primary Actions
+   - Buttons: Primary color (#906D22)
+   - Hover states: Secondary color (#FBB626)
+   - Focus states: Accent color (#2D7D76)
+
+2. Text Colors
+   - Headers: Dark color (#3F1A0B)
+   - Body text: UI Dark (#2A2520)
+   - Subtle text: 60% opacity of UI Dark
+
+3. Backgrounds
+   - Main background: UI Light (#F5F3F0)
+   - Cards/Elevated elements: White
+   - Accent sections: 10% opacity of Primary
+
+4. Progress & Status
+   - Progress bars: Primary to Secondary gradient
+   - Success states: Accent color
+   - Error states: Quaternary color (#983712)
+   - Warning states: Tertiary color (#DC641F)
+
+#### Implementation
+```typescript
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#906D22',
+        secondary: '#FBB626',
+        tertiary: '#DC641F',
+        quaternary: '#983712',
+        dark: '#3F1A0B',
+        'ui-light': '#F5F3F0',
+        'ui-dark': '#2A2520',
+        accent: '#2D7D76',
+      },
+    },
+  },
+}
+```
+
 ### Data Flow
 1. Server-side loaders fetch initial data
 2. Client-side updates save immediately

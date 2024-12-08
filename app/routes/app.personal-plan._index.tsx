@@ -136,21 +136,21 @@ export default function PersonalPlanQuestions() {
 
       <div className="space-y-12">
         {/* Progress indicator */}
-        <div className="h-1 bg-ui-light rounded-full overflow-hidden">
+        <div className="h-2 bg-ui-light rounded-full overflow-hidden border border-primary/10">
           <div 
-            className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-300"
+            className="h-full bg-gradient-to-r from-primary via-secondary to-tertiary transition-all duration-300"
             style={{ width: `${(currentStep / totalSteps) * 100}%` }}
           />
         </div>
-        <div className="text-ui-dark/60">
+        <div className="text-primary font-medium">
           Step {currentStep} of {totalSteps}
         </div>
 
         {/* Question */}
         <div>
-          <h2 className="text-4xl font-light text-dark">{currentQuestion.title}</h2>
+          <h2 className="text-4xl font-light text-primary">{currentQuestion.title}</h2>
           {currentQuestion.description && (
-            <p className="mt-4 text-xl font-light text-ui-dark">{currentQuestion.description}</p>
+            <p className="mt-4 text-xl font-light text-ui-dark/80">{currentQuestion.description}</p>
           )}
         </div>
 
@@ -159,7 +159,7 @@ export default function PersonalPlanQuestions() {
           <textarea
             name="answer"
             defaultValue={currentAnswer || ''}
-            className="w-full bg-transparent text-2xl font-light border-b-2 border-ui-dark/20 p-0 pb-2 resize-none focus:outline-none focus:ring-0 focus:border-primary"
+            className="w-full bg-transparent text-2xl font-light border-b-2 border-primary/20 p-0 pb-2 resize-none focus:outline-none focus:ring-0 focus:border-secondary text-ui-dark placeholder:text-primary/40"
             placeholder="Click here and start typing..."
             rows={3}
             autoFocus
@@ -168,12 +168,12 @@ export default function PersonalPlanQuestions() {
 
         {/* Tips */}
         {currentQuestion.tips && currentQuestion.tips.length > 0 && (
-          <div className="bg-primary/5 rounded-lg p-6">
-            <h3 className="text-sm font-medium text-dark mb-3">Tips</h3>
+          <div className="bg-primary/5 rounded-lg p-6 border-l-4 border-primary">
+            <h3 className="text-sm font-medium text-tertiary mb-3">Tips</h3>
             <ul className="space-y-2">
               {currentQuestion.tips.map((tip, index) => (
-                <li key={index} className="flex items-start text-ui-dark">
-                  <span className="mr-2">•</span>
+                <li key={index} className="flex items-start text-ui-dark/80">
+                  <span className="mr-2 text-primary">•</span>
                   <span>{tip}</span>
                 </li>
               ))}
@@ -188,13 +188,13 @@ export default function PersonalPlanQuestions() {
             name="previous"
             value="true"
             disabled={currentStep === 1}
-            className="px-6 py-3 text-base font-medium rounded-md text-ui-dark bg-ui-light hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
+            className="px-6 py-3 text-base font-medium rounded-md text-primary border-2 border-primary/20 hover:bg-primary/10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:hover:bg-transparent"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="px-6 py-3 text-base font-medium rounded-md text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+            className="px-6 py-3 text-base font-medium rounded-md text-white bg-primary hover:bg-secondary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
           >
             {currentStep === totalSteps ? 'Complete' : 'Next'}
           </button>

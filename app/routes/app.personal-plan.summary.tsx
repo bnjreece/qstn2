@@ -65,7 +65,7 @@ export default function PersonalPlanSummary(): ReactNode {
 
   return (
     <>
-      <h1 className="text-4xl font-light text-dark mb-8">Your Personal Plan Summary</h1>
+      <h1 className="text-4xl font-light text-primary mb-8">Your Personal Plan Summary</h1>
       
       <div className="space-y-16">
         {sections.map((section) => (
@@ -74,15 +74,15 @@ export default function PersonalPlanSummary(): ReactNode {
             
             <div className="space-y-8">
               {section.questions.map(({ question, answer }) => (
-                <div key={question.id} className="bg-white rounded-lg shadow-sm border border-primary/10 p-6 space-y-4">
+                <div key={question.id} className="bg-white rounded-lg shadow-sm border-l-4 border-primary p-6 space-y-4">
                   <div>
-                    <h3 className="text-xl font-medium text-dark">{question.title}</h3>
+                    <h3 className="text-xl font-medium text-tertiary">{question.title}</h3>
                     {question.description && (
-                      <p className="mt-1 text-ui-dark">{question.description}</p>
+                      <p className="mt-1 text-ui-dark/80">{question.description}</p>
                     )}
                   </div>
 
-                  <div className="bg-ui-light rounded p-4">
+                  <div className="bg-ui-light/50 rounded p-4 border border-primary/10">
                     {answer ? (
                       <div className="whitespace-pre-wrap text-ui-dark">{answer}</div>
                     ) : (
@@ -99,7 +99,7 @@ export default function PersonalPlanSummary(): ReactNode {
       <div className="mt-12 flex justify-end">
         <Link
           to=".."
-          className="px-6 py-3 text-base font-medium rounded-md text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+          className="px-6 py-3 text-base font-medium rounded-md text-white bg-primary hover:bg-secondary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
         >
           Edit Your Plan
         </Link>

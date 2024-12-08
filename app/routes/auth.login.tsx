@@ -213,18 +213,18 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ui-light">
-      <div className="w-full max-w-md space-y-8 rounded-lg bg-white/50 backdrop-blur-sm p-8 shadow-lg border border-primary/10">
-        <div className="text-center space-y-6">
+    <div className="flex min-h-screen items-center justify-center bg-secondary px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-12">
+        <div className="text-center space-y-8">
           <img 
             src="/images/qstn-logo.png" 
             alt="QSTN" 
-            className="h-12 w-auto mx-auto" 
+            className="h-24 w-auto mx-auto" 
           />
-          <h2 className="text-4xl font-serif text-text-primary">
+          <h2 className="text-3xl font-serif text-dark tracking-tight whitespace-nowrap">
             Reveal your story
           </h2>
-          <p className="text-text-secondary/60 text-lg font-serif">
+          <p className="text-xl font-serif text-dark/40">
             Start with your email—we'll save your progress
           </p>
         </div>
@@ -295,38 +295,35 @@ export default function Login() {
           </div>
         )}
 
-        <Form method="post" className="mt-8 space-y-6">
+        <Form method="post" className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-serif text-text-secondary">
+            <label htmlFor="email" className="sr-only">
               Email address
             </label>
-            <div className="mt-1">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="input"
-              />
-            </div>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="Enter your email"
+              className="input w-full text-lg"
+            />
           </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={cooldown > 0}
-              className={`group relative flex w-full justify-center rounded-md border border-transparent px-4 py-3 text-base font-serif text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                cooldown > 0 
-                  ? 'bg-primary/50 cursor-not-allowed' 
-                  : 'bg-primary hover:bg-primary-dark'
-              }`}
-            >
-              {cooldown > 0 
-                ? `Wait ${cooldown}s before requesting again` 
-                : 'Continue with email'}
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={cooldown > 0}
+            className={`btn-primary btn-lg w-full ${
+              cooldown > 0 
+                ? 'opacity-50 cursor-not-allowed' 
+                : ''
+            }`}
+          >
+            {cooldown > 0 
+              ? `Wait ${cooldown}s before requesting again` 
+              : 'Continue with email'}
+          </button>
         </Form>
 
         {/* Development only: Clear Session button */}

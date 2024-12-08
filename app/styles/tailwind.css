@@ -14,15 +14,20 @@
 
 @layer components {
   .btn {
-    @apply px-6 py-3 text-base font-serif rounded-md shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply inline-flex justify-center items-center px-4 py-2.5 text-base font-serif rounded-lg shadow-sm transition-all;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
 
   .btn-primary {
-    @apply bg-primary text-white hover:bg-primary-dark focus:ring-primary;
+    @apply btn bg-quaternary text-white hover:bg-quaternary/90 focus:ring-quaternary active:bg-quaternary/80;
   }
 
   .btn-secondary {
-    @apply bg-white text-text-primary border-2 border-primary/20 hover:bg-primary/5 focus:ring-primary;
+    @apply btn bg-tertiary text-white hover:bg-tertiary/90 focus:ring-tertiary active:bg-tertiary/80;
+  }
+
+  .btn-lg {
+    @apply px-8 py-3 text-lg;
   }
 
   .btn-text {

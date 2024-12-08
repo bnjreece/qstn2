@@ -37,7 +37,7 @@ export default function AppIndex() {
         <img 
           src="/images/qstn-logo.png" 
           alt="QSTN" 
-          className="h-16 w-auto mx-auto" 
+          className="h-24 w-auto mx-auto" 
         />
         <h1 className="text-5xl font-serif text-text-primary">
           Welcome to QSTN
@@ -48,7 +48,7 @@ export default function AppIndex() {
       </div>
       <Link
         to="/app/personal-plan"
-        className="inline-flex items-center px-8 py-4 text-xl font-serif rounded-md shadow-sm text-white bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-tertiary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+        className="btn-primary btn-lg"
       >
         Get Started with Personal Plan
       </Link>

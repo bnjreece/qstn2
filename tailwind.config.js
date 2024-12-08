@@ -13,6 +13,9 @@ export default {
         'ui-dark': '#2A2520',
         accent: '#2D7D76',
       },
+      fontFamily: {
+        serif: ['Fraunces', 'serif'], // A hipster-friendly, refined serif font
+      },
       gradientColorStops: theme => ({
         ...theme('colors'),
       }),

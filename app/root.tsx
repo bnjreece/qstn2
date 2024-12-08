@@ -60,7 +60,7 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap",
   },
   { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
 ];
@@ -79,7 +79,7 @@ export default function App(): JSX.Element {
   }, []);
 
   return (
-    <html lang="en" className="h-full bg-gray-100">
+    <html lang="en" className="h-full bg-ui-light">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

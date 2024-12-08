@@ -142,17 +142,17 @@ export default function PersonalPlanQuestions() {
             style={{ width: `${(currentStep / totalSteps) * 100}%` }}
           />
         </div>
-        <div className="text-quaternary font-medium flex items-center gap-2">
-          <span className="text-2xl text-primary">{currentStep}</span>
+        <div className="text-quaternary font-serif flex items-center gap-2">
+          <span className="text-2xl text-primary font-medium">{currentStep}</span>
           <span className="text-dark/60">of</span>
           <span className="text-tertiary">{totalSteps}</span>
         </div>
 
         {/* Question */}
         <div>
-          <h2 className="text-4xl font-light text-primary border-b border-primary/10 pb-2">{currentQuestion.title}</h2>
+          <h2 className="text-4xl font-serif text-primary border-b border-primary/10 pb-2">{currentQuestion.title}</h2>
           {currentQuestion.description && (
-            <p className="mt-4 text-xl font-light text-dark/70">{currentQuestion.description}</p>
+            <p className="mt-4 text-xl font-serif text-dark/70 leading-relaxed">{currentQuestion.description}</p>
           )}
         </div>
 
@@ -161,7 +161,7 @@ export default function PersonalPlanQuestions() {
           <textarea
             name="answer"
             defaultValue={currentAnswer || ''}
-            className="w-full bg-white/50 backdrop-blur-sm text-2xl font-light border-2 rounded-lg border-secondary/20 p-4 resize-none focus:outline-none focus:ring-0 focus:border-secondary text-dark placeholder:text-primary/40 shadow-sm"
+            className="w-full bg-white/50 backdrop-blur-sm text-2xl font-serif border-2 rounded-lg border-secondary/20 p-4 resize-none focus:outline-none focus:ring-0 focus:border-secondary text-dark placeholder:text-primary/40 placeholder:font-serif shadow-sm"
             placeholder="Click here and start typing..."
             rows={3}
             autoFocus
@@ -171,13 +171,13 @@ export default function PersonalPlanQuestions() {
         {/* Tips */}
         {currentQuestion.tips && currentQuestion.tips.length > 0 && (
           <div className="bg-white/50 backdrop-blur-sm rounded-lg p-6 border-l-4 border-tertiary shadow-sm">
-            <h3 className="text-sm font-medium text-quaternary mb-3 flex items-center gap-2">
+            <h3 className="text-sm font-serif font-medium text-quaternary mb-3 flex items-center gap-2">
               <span className="text-tertiary text-lg">💡</span>
               Tips
             </h3>
             <ul className="space-y-2">
               {currentQuestion.tips.map((tip, index) => (
-                <li key={index} className="flex items-start text-dark/70">
+                <li key={index} className="flex items-start text-dark/70 font-serif">
                   <span className="mr-2 text-secondary">•</span>
                   <span>{tip}</span>
                 </li>
@@ -193,13 +193,13 @@ export default function PersonalPlanQuestions() {
             name="previous"
             value="true"
             disabled={currentStep === 1}
-            className="px-6 py-3 text-base font-medium rounded-md text-dark bg-white/50 backdrop-blur-sm border-2 border-primary/20 hover:bg-primary/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:hover:bg-transparent shadow-sm hover:shadow-md"
+            className="px-6 py-3 text-base font-serif rounded-md text-dark bg-white border-2 border-primary/20 hover:bg-primary/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:hover:bg-transparent shadow-sm hover:shadow-md"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="px-6 py-3 text-base font-medium rounded-md text-white bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-tertiary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-sm hover:shadow-md"
+            className="bg-[rgb(220,100,31)] text-white px-8 py-3 text-base font-serif rounded-md shadow-lg hover:bg-[rgb(200,90,28)]"
           >
             {currentStep === totalSteps ? 'Complete' : 'Next'}
           </button>

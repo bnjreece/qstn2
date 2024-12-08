@@ -119,8 +119,7 @@ Each strategic plan consists of multiple sections, stored as JSON in document_se
 - [x] Mobile-friendly touch gestures
 
 #### 5. Data Management & Polish
-- [ ] Setup Supabase real-time subscriptions
-- [ ] Implement autosave to document_sections
+- [ ] Implement autosave to answers table
 - [ ] Add optimistic updates
 - [ ] Handle offline/error states
 - [ ] Add save indicators

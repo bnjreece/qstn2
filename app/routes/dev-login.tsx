@@ -14,15 +14,28 @@ export const loader: LoaderFunction = async () => {
 
 export default function DevLogin() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-4">Dev Login</h1>
-        <Form method="post">
+    <div className="flex min-h-screen items-center justify-center bg-ui-light">
+      <div className="w-full max-w-md space-y-8 rounded-lg bg-white/50 backdrop-blur-sm p-8 shadow-lg border border-primary/10">
+        <div className="text-center space-y-6">
+          <img 
+            src="/images/qstn-logo.png" 
+            alt="QSTN" 
+            className="h-12 w-auto mx-auto" 
+          />
+          <h2 className="text-4xl font-serif text-text-primary">
+            Reveal your story
+          </h2>
+          <p className="text-text-secondary/60 text-lg font-serif">
+            Development login
+          </p>
+        </div>
+
+        <Form method="post" className="mt-8">
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+            className="w-full flex justify-center rounded-md px-4 py-3 text-base font-serif text-white shadow-sm bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
-            Login as Dev User
+            Continue as dev user
           </button>
         </Form>
       </div>

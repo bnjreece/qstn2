@@ -65,28 +65,28 @@ export default function PersonalPlanSummary(): ReactNode {
 
   return (
     <>
-      <h1 className="text-4xl font-light text-primary mb-8">Your Personal Plan Summary</h1>
+      <h1 className="text-4xl font-light text-primary mb-8 border-b-2 border-primary/20 pb-4">Your Personal Plan Summary</h1>
       
       <div className="space-y-16">
         {sections.map((section) => (
           <div key={section.title} className="space-y-8">
-            <h2 className="text-3xl font-light text-dark">{section.title}</h2>
+            <h2 className="text-3xl font-light text-tertiary">{section.title}</h2>
             
             <div className="space-y-8">
               {section.questions.map(({ question, answer }) => (
-                <div key={question.id} className="bg-white rounded-lg shadow-sm border-l-4 border-primary p-6 space-y-4">
+                <div key={question.id} className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border-l-4 border-secondary p-6 space-y-4 hover:shadow-md transition-shadow duration-200">
                   <div>
-                    <h3 className="text-xl font-medium text-tertiary">{question.title}</h3>
+                    <h3 className="text-xl font-medium text-quaternary">{question.title}</h3>
                     {question.description && (
-                      <p className="mt-1 text-ui-dark/80">{question.description}</p>
+                      <p className="mt-1 text-dark/70">{question.description}</p>
                     )}
                   </div>
 
-                  <div className="bg-ui-light/50 rounded p-4 border border-primary/10">
+                  <div className="bg-ui-light/80 rounded p-4 border border-secondary/10">
                     {answer ? (
-                      <div className="whitespace-pre-wrap text-ui-dark">{answer}</div>
+                      <div className="whitespace-pre-wrap text-dark">{answer}</div>
                     ) : (
-                      <div className="text-ui-dark/40 italic">No answer provided</div>
+                      <div className="text-dark/40 italic">No answer provided</div>
                     )}
                   </div>
                 </div>
@@ -99,7 +99,7 @@ export default function PersonalPlanSummary(): ReactNode {
       <div className="mt-12 flex justify-end">
         <Link
           to=".."
-          className="px-6 py-3 text-base font-medium rounded-md text-white bg-primary hover:bg-secondary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+          className="px-6 py-3 text-base font-medium rounded-md text-white bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-tertiary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-sm hover:shadow-md"
         >
           Edit Your Plan
         </Link>

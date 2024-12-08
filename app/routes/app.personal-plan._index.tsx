@@ -118,7 +118,7 @@ export default function PersonalPlanQuestions() {
   if (!questions.length) {
     return (
       <div className="min-h-screen bg-ui-light flex items-center justify-center">
-        <div className="text-ui-dark">No questions found. Please make sure questions are seeded in the database.</div>
+        <div className="text-dark/70">No questions found. Please make sure questions are seeded in the database.</div>
       </div>
     );
   }
@@ -136,21 +136,23 @@ export default function PersonalPlanQuestions() {
 
       <div className="space-y-12">
         {/* Progress indicator */}
-        <div className="h-2 bg-ui-light rounded-full overflow-hidden border border-primary/10">
+        <div className="h-3 bg-white/50 backdrop-blur-sm rounded-full overflow-hidden border border-secondary/20 shadow-sm">
           <div 
             className="h-full bg-gradient-to-r from-primary via-secondary to-tertiary transition-all duration-300"
             style={{ width: `${(currentStep / totalSteps) * 100}%` }}
           />
         </div>
-        <div className="text-primary font-medium">
-          Step {currentStep} of {totalSteps}
+        <div className="text-quaternary font-medium flex items-center gap-2">
+          <span className="text-2xl text-primary">{currentStep}</span>
+          <span className="text-dark/60">of</span>
+          <span className="text-tertiary">{totalSteps}</span>
         </div>
 
         {/* Question */}
         <div>
-          <h2 className="text-4xl font-light text-primary">{currentQuestion.title}</h2>
+          <h2 className="text-4xl font-light text-primary border-b border-primary/10 pb-2">{currentQuestion.title}</h2>
           {currentQuestion.description && (
-            <p className="mt-4 text-xl font-light text-ui-dark/80">{currentQuestion.description}</p>
+            <p className="mt-4 text-xl font-light text-dark/70">{currentQuestion.description}</p>
           )}
         </div>
 
@@ -159,7 +161,7 @@ export default function PersonalPlanQuestions() {
           <textarea
             name="answer"
             defaultValue={currentAnswer || ''}
-            className="w-full bg-transparent text-2xl font-light border-b-2 border-primary/20 p-0 pb-2 resize-none focus:outline-none focus:ring-0 focus:border-secondary text-ui-dark placeholder:text-primary/40"
+            className="w-full bg-white/50 backdrop-blur-sm text-2xl font-light border-2 rounded-lg border-secondary/20 p-4 resize-none focus:outline-none focus:ring-0 focus:border-secondary text-dark placeholder:text-primary/40 shadow-sm"
             placeholder="Click here and start typing..."
             rows={3}
             autoFocus
@@ -168,12 +170,15 @@ export default function PersonalPlanQuestions() {
 
         {/* Tips */}
         {currentQuestion.tips && currentQuestion.tips.length > 0 && (
-          <div className="bg-primary/5 rounded-lg p-6 border-l-4 border-primary">
-            <h3 className="text-sm font-medium text-tertiary mb-3">Tips</h3>
+          <div className="bg-white/50 backdrop-blur-sm rounded-lg p-6 border-l-4 border-tertiary shadow-sm">
+            <h3 className="text-sm font-medium text-quaternary mb-3 flex items-center gap-2">
+              <span className="text-tertiary text-lg">💡</span>
+              Tips
+            </h3>
             <ul className="space-y-2">
               {currentQuestion.tips.map((tip, index) => (
-                <li key={index} className="flex items-start text-ui-dark/80">
-                  <span className="mr-2 text-primary">•</span>
+                <li key={index} className="flex items-start text-dark/70">
+                  <span className="mr-2 text-secondary">•</span>
                   <span>{tip}</span>
                 </li>
               ))}
@@ -182,19 +187,19 @@ export default function PersonalPlanQuestions() {
         )}
 
         {/* Navigation */}
-        <div className="flex justify-between gap-4">
+        <div className="flex justify-between gap-4 pt-4">
           <button
             type="submit"
             name="previous"
             value="true"
             disabled={currentStep === 1}
-            className="px-6 py-3 text-base font-medium rounded-md text-primary border-2 border-primary/20 hover:bg-primary/10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:hover:bg-transparent"
+            className="px-6 py-3 text-base font-medium rounded-md text-dark bg-white/50 backdrop-blur-sm border-2 border-primary/20 hover:bg-primary/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:hover:bg-transparent shadow-sm hover:shadow-md"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="px-6 py-3 text-base font-medium rounded-md text-white bg-primary hover:bg-secondary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+            className="px-6 py-3 text-base font-medium rounded-md text-white bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-tertiary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent shadow-sm hover:shadow-md"
           >
             {currentStep === totalSteps ? 'Complete' : 'Next'}
           </button>

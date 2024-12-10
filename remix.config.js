@@ -7,6 +7,7 @@ export default {
     v3_singleFetch: true,
     v3_lazyRouteDiscovery: true,
     v3_relativeSplatPath: true,
+    v3_fetcherPersist: true,
   },
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
@@ -14,5 +15,5 @@ export default {
   // publicPath: "/build/",
   serverPlatform: "node",
   serverMinify: true,
-  serverDependenciesToBundle: "all",
+  serverDependenciesToBundle: ["@heroicons/react"],
 }; 

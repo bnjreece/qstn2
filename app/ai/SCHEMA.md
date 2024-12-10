@@ -1,74 +1,60 @@
-# Database Schema
+# QSTN Database Schema
 
-## Tables
-
-### documents
-| Column | Type | Nullable | Default | Key | References |
-|--------|------|----------|----------|-----|------------|
-| id | uuid | NO | gen_random_uuid() | PK | |
-| user_id | uuid | NO | | FK | users(id) |
-| title | text | NO | | | |
-| created_at | timestamptz | NO | now() | | |
-| updated_at | timestamptz | NO | now() | | |
-| is_complete | boolean | NO | false | | |
-
-### document_sections
-| Column | Type | Nullable | Default | Key | References |
-|--------|------|----------|----------|-----|------------|
-| id | uuid | NO | gen_random_uuid() | PK | |
-| document_id | uuid | NO | | FK | documents(id) |
-| section_type | text | NO | | | |
-| content | jsonb | NO | '{}' | | |
-| order_index | integer | NO | | | |
-| created_at | timestamptz | NO | now() | | |
-| updated_at | timestamptz | NO | now() | | |
-
-### questions
-| Column | Type | Nullable | Default | Key | References |
-|--------|------|----------|----------|-----|------------|
-| id | uuid | NO | uuid_generate_v4() | PK | |
-| title | text | NO | | | |
-| description | text | YES | | | |
-| tips | text[] | YES | | | |
-| type | text | NO | | | |
-| order_index | integer | NO | | | |
-| is_active | boolean | YES | true | | |
-| created_at | timestamptz | NO | now() | | |
-| updated_at | timestamptz | NO | now() | | |
+## Current Tables
 
 ### answers
-| Column | Type | Nullable | Default | Key | References |
-|--------|------|----------|----------|-----|------------|
-| id | uuid | NO | uuid_generate_v4() | PK | |
-| user_id | uuid | NO | | FK | users(id) |
-| question_id | uuid | NO | | FK | questions(id) |
-| answer | text | YES | | | |
-| created_at | timestamptz | NO | now() | | |
-| updated_at | timestamptz | NO | now() | | |
+- id: UUID PRIMARY KEY DEFAULT uuid_generate_v4()
+- user_id: UUID NOT NULL REFERENCES auth.users(id)
+- question_id: UUID NOT NULL REFERENCES questions(id)
+- answer: TEXT
+- created_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- updated_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+### questions
+- id: UUID PRIMARY KEY DEFAULT uuid_generate_v4()
+- title: TEXT NOT NULL
+- description: TEXT
+- tips: TEXT[]
+- type: TEXT NOT NULL
+- order_index: INTEGER NOT NULL
+- is_active: BOOLEAN DEFAULT true
+- created_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- updated_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
 ### question_dependencies
-| Column | Type | Nullable | Default | Key | References |
-|--------|------|----------|----------|-----|------------|
-| id | uuid | NO | uuid_generate_v4() | PK | |
-| question_id | uuid | NO | | FK | questions(id) |
-| dependent_on_question_id | uuid | NO | | FK | questions(id) |
-| condition | jsonb | NO | '{}' | | |
-| created_at | timestamptz | NO | now() | | |
+- id: UUID PRIMARY KEY DEFAULT uuid_generate_v4()
+- question_id: UUID NOT NULL REFERENCES questions(id)
+- dependent_on_question_id: UUID NOT NULL REFERENCES questions(id)
+- condition: JSONB NOT NULL DEFAULT '{}'
+- created_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
-## Indexes
-- `documents`: Primary key on `id`
-- `document_sections`: Primary key on `id`, Foreign key on `document_id`
-- `questions`: Primary key on `id`, Index on `type`, `order_index`, and `is_active`
-- `answers`: Primary key on `id`, Unique constraint on `(user_id, question_id)`, Foreign keys on `user_id` and `question_id`
-- `question_dependencies`: Primary key on `id`, Foreign keys on `question_id` and `dependent_on_question_id`
+### documents
+- id: UUID PRIMARY KEY DEFAULT gen_random_uuid()
+- user_id: UUID NOT NULL REFERENCES auth.users(id)
+- title: TEXT NOT NULL
+- is_complete: BOOLEAN NOT NULL DEFAULT false
+- created_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- updated_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
-## Triggers
-- `update_questions_updated_at`: Updates `updated_at` timestamp on questions table before update
-- `update_answers_updated_at`: Updates `updated_at` timestamp on answers table before update
+### document_sections
+- id: UUID PRIMARY KEY DEFAULT gen_random_uuid()
+- document_id: UUID NOT NULL REFERENCES documents(id)
+- section_type: TEXT NOT NULL
+- content: JSONB NOT NULL DEFAULT '{}'
+- order_index: INTEGER NOT NULL
+- created_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- updated_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
-## Notes
-- All tables use UUID for primary keys
-- Timestamps are stored in timezone-aware format
-- JSON data is stored using `jsonb` type for better performance
-- Question dependencies allow for branching flows based on previous answers
-- Row-level security policies are in place for user data isolation 
+### user_preferences
+- user_id: UUID PRIMARY KEY REFERENCES auth.users(id)
+- planning_direction: TEXT NOT NULL DEFAULT 'top_down'
+- created_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- updated_at: TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+## Relationships
+- answers -> questions (question_id)
+- answers -> auth.users (user_id)
+- question_dependencies -> questions (question_id, dependent_on_question_id)
+- documents -> auth.users (user_id)
+- document_sections -> documents (document_id)
+- user_preferences -> auth.users (user_id) 

@@ -126,7 +126,7 @@ export default function PersonalPlanQuestions() {
   const currentQuestion = questions[currentStep - 1];
 
   return (
-    <Form method="post" className="space-y-8">
+    <Form method="post" className="space-y-4 md:space-y-8">
       <input type="hidden" name="_action" value="saveAnswer" />
       <input type="hidden" name="questionId" value={currentQuestion.id} />
       <input type="hidden" name="step" value={currentStep} />
@@ -134,34 +134,36 @@ export default function PersonalPlanQuestions() {
         <input type="hidden" name="complete" value="true" />
       )}
 
-      <div className="space-y-12">
+      <div className="space-y-6 md:space-y-8">
         {/* Progress indicator */}
-        <div className="progress-bar">
-          <div 
-            className="progress-bar-fill"
-            style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-2xl text-primary font-medium">{currentStep}</span>
-          <span className="text-dark/60">of</span>
-          <span className="text-tertiary">{totalSteps}</span>
+        <div>
+          <div className="progress-bar">
+            <div 
+              className="progress-bar-fill"
+              style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+            />
+          </div>
+          <div className="mt-1 md:mt-2 flex items-center gap-1 md:gap-2 justify-end text-sm md:text-base">
+            <span className="text-lg md:text-2xl text-primary font-medium">{currentStep}</span>
+            <span className="text-dark/60">of</span>
+            <span className="text-tertiary">{totalSteps}</span>
+          </div>
         </div>
 
         {/* Question */}
         <div>
           <h2 className="heading-1 border-b border-primary/10 pb-2">{currentQuestion.title}</h2>
           {currentQuestion.description && (
-            <p className="mt-4 text-xl text-body">{currentQuestion.description}</p>
+            <p className="mt-3 text-lg md:text-xl text-body">{currentQuestion.description}</p>
           )}
         </div>
 
         {/* Answer input */}
-        <div className="py-8">
+        <div className="py-4">
           <textarea
             name="answer"
             defaultValue={currentAnswer || ''}
-            className="input text-2xl resize-none"
+            className="input text-xl md:text-2xl resize-none"
             placeholder="Click here and start typing..."
             rows={3}
             autoFocus
@@ -169,7 +171,7 @@ export default function PersonalPlanQuestions() {
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-between gap-4 pt-4">
+        <div className="flex justify-between gap-4">
           <button
             type="submit"
             name="previous"
@@ -189,12 +191,12 @@ export default function PersonalPlanQuestions() {
 
         {/* Tips */}
         {currentQuestion.tips && currentQuestion.tips.length > 0 && (
-          <div className="card p-6 border-l-4 border-tertiary">
-            <h3 className="heading-2 text-sm mb-3 flex items-center gap-2">
+          <div className="card p-4 md:p-6 border-l-4 border-tertiary">
+            <h3 className="heading-2 text-sm mb-2 md:mb-3 flex items-center gap-2">
               <span className="text-tertiary text-lg">💡</span>
               Tips
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-1 md:space-y-2">
               {currentQuestion.tips.map((tip, index) => (
                 <li key={index} className="flex items-start text-body">
                   <span className="mr-2 text-secondary">•</span>

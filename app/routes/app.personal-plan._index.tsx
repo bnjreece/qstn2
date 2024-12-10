@@ -3,6 +3,7 @@ import { Form, useLoaderData } from '@remix-run/react';
 import { requireUserId } from '~/utils/auth.server';
 import { supabase } from '~/utils/supabase.server';
 import type { Question } from '~/utils/questions.server';
+import { QuestionCategory } from "~/components/QuestionCategory";
 
 interface LoaderData {
   questions: Question[];
@@ -124,6 +125,44 @@ export default function PersonalPlanQuestions() {
   }
 
   const currentQuestion = questions[currentStep - 1];
+  
+  // Extract category and timeframe from question type
+  const getTypeMapping = (type: string) => {
+    // Handle foundation questions
+    if (type === 'mission' || type === 'vision' || type === 'values') {
+      return {
+        category: type,
+        timeframe: 'foundation'
+      };
+    }
+
+    // Handle long term aspirations
+    if (type === 'long_term_aspirations') {
+      const category = currentQuestion.title.toLowerCase().includes('relationship') ? 'relationships' :
+                      currentQuestion.title.toLowerCase().includes('achievement') ? 'achievements' :
+                      currentQuestion.title.toLowerCase().includes('ritual') ? 'rituals' :
+                      'wealth_experience';
+      return {
+        category,
+        timeframe: 'long_term'
+      };
+    }
+
+    // Handle activities (one_week, ninety_day, one_year)
+    const [timeframe, category] = type.split('_activities')[0].split('_');
+    const mappedTimeframe = timeframe === 'ninety' ? 'ninety_day' : 
+                           timeframe === 'one' ? `one_${category}` : timeframe;
+    
+    return {
+      category: currentQuestion.title.toLowerCase().includes('relationship') ? 'relationships' :
+                currentQuestion.title.toLowerCase().includes('achievement') ? 'achievements' :
+                currentQuestion.title.toLowerCase().includes('ritual') ? 'rituals' :
+                'wealth_experience',
+      timeframe: mappedTimeframe
+    };
+  };
+
+  const { category, timeframe } = getTypeMapping(currentQuestion.type);
 
   return (
     <Form method="post" className="space-y-4 md:space-y-8">
@@ -150,8 +189,12 @@ export default function PersonalPlanQuestions() {
           </div>
         </div>
 
-        {/* Question */}
+        {/* Category and Question */}
         <div>
+          <QuestionCategory 
+            category={category as any}
+            timeframe={timeframe as any}
+          />
           <h2 className="heading-1 border-b border-primary/10 pb-2">{currentQuestion.title}</h2>
           {currentQuestion.description && (
             <p className="mt-3 text-lg md:text-xl text-body">{currentQuestion.description}</p>

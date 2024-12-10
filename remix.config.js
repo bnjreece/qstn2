@@ -2,7 +2,11 @@
 export default {
   ignoredRouteFiles: ["**/.*"],
   serverModuleFormat: "cjs",
-  serverDependenciesToBundle: ["@heroicons/react"],
+  serverDependenciesToBundle: [/^@heroicons\/react.*/],
+  future: {
+    v3_throwAbortReason: true,
+    v3_singleFetch: true,
+  },
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // serverBuildPath: "build/index.js",

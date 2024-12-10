@@ -4,6 +4,7 @@ import { requireUserId } from '~/utils/auth.server';
 import { supabase } from '~/utils/supabase.server';
 import type { Question } from '~/utils/questions.server';
 import { QuestionCategory } from "~/components/QuestionCategory";
+import { useEffect, useRef } from 'react';
 
 interface LoaderData {
   questions: Question[];
@@ -115,6 +116,26 @@ export async function action({ request }: { request: Request }) {
 
 export default function PersonalPlanQuestions() {
   const { questions, currentStep, totalSteps, currentAnswer } = useLoaderData<typeof loader>();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const adjustHeight = () => {
+      textarea.style.height = 'inherit';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    };
+
+    // Initial adjustment
+    adjustHeight();
+
+    // Adjust on input
+    textarea.addEventListener('input', adjustHeight);
+    
+    // Cleanup
+    return () => textarea.removeEventListener('input', adjustHeight);
+  }, [currentStep]); // Re-run when step changes
 
   if (!questions.length) {
     return (
@@ -206,9 +227,9 @@ export default function PersonalPlanQuestions() {
           <textarea
             name="answer"
             defaultValue={currentAnswer || ''}
-            className="input text-xl md:text-2xl resize-none"
+            className="input text-xl md:text-2xl w-full !min-h-[240px]"
             placeholder="Click here and start typing..."
-            rows={3}
+            rows={8}
             autoFocus
           />
         </div>

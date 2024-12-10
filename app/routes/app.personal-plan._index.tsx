@@ -1,16 +1,17 @@
 import { json, redirect } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData, useSubmit } from '@remix-run/react';
 import { requireUserId } from '~/utils/auth.server';
 import { supabase } from '~/utils/supabase.server';
 import type { Question } from '~/utils/questions.server';
 import { QuestionCategory } from "~/components/QuestionCategory";
-import { useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 interface LoaderData {
   questions: Question[];
   currentStep: number;
   totalSteps: number;
   currentAnswer: string | null;
+  planningDirection: 'top_down' | 'bottom_up';
 }
 
 export async function loader({ request }: { request: Request }) {
@@ -18,15 +19,25 @@ export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   const currentStep = parseInt(url.searchParams.get('step') || '1');
 
+  // Get user's planning direction preference
+  const { data: preference } = await supabase
+    .from('user_preferences')
+    .select('planning_direction')
+    .eq('user_id', userId)
+    .single();
+
+  const planningDirection = preference?.planning_direction || 'top_down';
+
+  // Get questions and sort based on direction
   const { data: questions, error } = await supabase
     .from('questions')
     .select('*')
     .eq('is_active', true)
-    .order('order_index');
+    .order('order_index', { ascending: planningDirection === 'top_down' });
 
   if (error) throw error;
   if (!questions?.length) {
-    return json({ questions: [], currentStep: 1, totalSteps: 0, currentAnswer: null });
+    return json({ questions: [], currentStep: 1, totalSteps: 0, currentAnswer: null, planningDirection });
   }
 
   // Validate step parameter
@@ -47,27 +58,38 @@ export async function loader({ request }: { request: Request }) {
     questions,
     currentStep,
     totalSteps: questions.length,
-    currentAnswer: answer?.answer || null
+    currentAnswer: answer?.answer || null,
+    planningDirection
   });
 }
 
 export async function action({ request }: { request: Request }) {
   const userId = await requireUserId(request);
   const formData = await request.formData();
+  const direction = formData.get('direction');
+
+  // Handle direction choice submission
+  if (direction) {
+    const { error } = await supabase
+      .from('user_preferences')
+      .upsert({
+        user_id: userId,
+        planning_direction: direction,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'user_id'
+      });
+
+    if (error) throw error;
+    return redirect('?step=2'); // Start with the first actual question
+  }
+
+  // Handle regular question submissions
   const questionId = formData.get('questionId');
   const answer = formData.get('answer');
   const step = formData.get('step');
   const complete = formData.get('complete') === 'true';
   const previous = formData.get('previous') === 'true';
-
-  console.log('[PersonalPlan Action] Starting', {
-    questionId,
-    step,
-    complete,
-    previous,
-    formData: Object.fromEntries(formData),
-    url: request.url
-  });
 
   if (!questionId || !step) {
     throw new Error('Missing required fields');
@@ -103,39 +125,18 @@ export async function action({ request }: { request: Request }) {
 
   // If this is the last step and we're completing, go to summary
   if (complete) {
-    console.log('[PersonalPlan Action] Redirecting to summary');
     return redirect('/app/personal-plan/summary');
   }
 
   // Otherwise, go to the next or previous step
   const currentStep = parseInt(step.toString());
   const nextStep = previous ? currentStep - 1 : currentStep + 1;
-  console.log('[PersonalPlan Action] Redirecting to step', nextStep);
   return redirect(`/app/personal-plan?step=${nextStep}`);
 }
 
 export default function PersonalPlanQuestions() {
-  const { questions, currentStep, totalSteps, currentAnswer } = useLoaderData<typeof loader>();
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-
-    const adjustHeight = () => {
-      textarea.style.height = 'inherit';
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    };
-
-    // Initial adjustment
-    adjustHeight();
-
-    // Adjust on input
-    textarea.addEventListener('input', adjustHeight);
-    
-    // Cleanup
-    return () => textarea.removeEventListener('input', adjustHeight);
-  }, [currentStep]); // Re-run when step changes
+  const { questions, currentStep, totalSteps, currentAnswer, planningDirection } = useLoaderData<typeof loader>();
+  const submit = useSubmit();
 
   if (!questions.length) {
     return (
@@ -145,10 +146,86 @@ export default function PersonalPlanQuestions() {
     );
   }
 
-  const currentQuestion = questions[currentStep - 1];
+  // Show direction choice as first step
+  if (currentStep === 1) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-8">
+        <div>
+          <h2 className="heading-1 border-b border-primary/10 pb-2">Choose Your Planning Approach</h2>
+          <p className="mt-3 text-lg md:text-xl text-body">Would you prefer to start with long-term aspirations and work down to weekly actions, or start with weekly actions and build up to long-term aspirations?</p>
+        </div>
+
+        <Form method="post" className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <label className="group cursor-pointer">
+              <input 
+                type="radio" 
+                name="direction" 
+                value="top_down" 
+                className="sr-only peer"
+              />
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border-2 border-secondary/20 p-6 hover:border-secondary hover:shadow-md transition-all duration-200 peer-checked:border-secondary">
+                <h3 className="text-xl font-medium text-quaternary mb-3">Big Picture First</h3>
+                <p className="text-dark/70">Start with your long-term vision and break it down into smaller steps</p>
+              </div>
+            </label>
+
+            <label className="group cursor-pointer">
+              <input 
+                type="radio" 
+                name="direction" 
+                value="bottom_up" 
+                className="sr-only peer"
+              />
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border-2 border-secondary/20 p-6 hover:border-secondary hover:shadow-md transition-all duration-200 peer-checked:border-secondary">
+                <h3 className="text-xl font-medium text-quaternary mb-3">Small Steps First</h3>
+                <p className="text-dark/70">Begin with immediate actions and gradually build towards your bigger goals</p>
+              </div>
+            </label>
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="btn btn-primary px-8"
+            >
+              Continue
+            </button>
+          </div>
+
+          <div className="card p-4 md:p-6 border-l-4 border-tertiary">
+            <h3 className="heading-2 text-sm mb-2 md:mb-3 flex items-center gap-2">
+              <span className="text-tertiary text-lg">💡</span>
+              Tips
+            </h3>
+            <ul className="space-y-1 md:space-y-2">
+              <li className="flex items-start text-body">
+                <span className="mr-2 text-secondary">•</span>
+                <span>Starting with long-term helps set the big picture first</span>
+              </li>
+              <li className="flex items-start text-body">
+                <span className="mr-2 text-secondary">•</span>
+                <span>Starting with short-term helps build momentum with immediate actions</span>
+              </li>
+            </ul>
+          </div>
+        </Form>
+      </div>
+    );
+  }
+
+  const currentQuestion = questions[currentStep - 2]; // Offset by 1 since first step is direction choice
   
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen bg-ui-light flex items-center justify-center">
+        <div className="text-dark/70">Question not found. Please try refreshing the page.</div>
+      </div>
+    );
+  }
+
   // Extract category and timeframe from question type
-  const getTypeMapping = (type: string) => {
+  const getTypeMapping = (type: string, title: string) => {
     // Handle foundation questions
     if (type === 'mission' || type === 'vision' || type === 'values') {
       return {
@@ -159,9 +236,9 @@ export default function PersonalPlanQuestions() {
 
     // Handle long term aspirations
     if (type === 'long_term_aspirations') {
-      const category = currentQuestion.title.toLowerCase().includes('relationship') ? 'relationships' :
-                      currentQuestion.title.toLowerCase().includes('achievement') ? 'achievements' :
-                      currentQuestion.title.toLowerCase().includes('ritual') ? 'rituals' :
+      const category = title.toLowerCase().includes('relationship') ? 'relationships' :
+                      title.toLowerCase().includes('achievement') ? 'achievements' :
+                      title.toLowerCase().includes('ritual') ? 'rituals' :
                       'wealth_experience';
       return {
         category,
@@ -175,15 +252,22 @@ export default function PersonalPlanQuestions() {
                            timeframe === 'one' ? `one_${category}` : timeframe;
     
     return {
-      category: currentQuestion.title.toLowerCase().includes('relationship') ? 'relationships' :
-                currentQuestion.title.toLowerCase().includes('achievement') ? 'achievements' :
-                currentQuestion.title.toLowerCase().includes('ritual') ? 'rituals' :
+      category: title.toLowerCase().includes('relationship') ? 'relationships' :
+                title.toLowerCase().includes('achievement') ? 'achievements' :
+                title.toLowerCase().includes('ritual') ? 'rituals' :
                 'wealth_experience',
       timeframe: mappedTimeframe
     };
   };
 
-  const { category, timeframe } = getTypeMapping(currentQuestion.type);
+  const { category, timeframe } = getTypeMapping(currentQuestion.type, currentQuestion.title);
+
+  // Handle direction change
+  const handleDirectionChange = (newDirection: 'top_down' | 'bottom_up') => {
+    const formData = new FormData();
+    formData.append('direction', newDirection);
+    submit(formData, { method: 'post' });
+  };
 
   return (
     <Form method="post" className="space-y-4 md:space-y-8">
